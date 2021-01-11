@@ -109,7 +109,7 @@ sealtalk-config:
   auth_cookie_max_age: 8640000    #  auth_cookie有效期单位秒 8640000=100天
   rongcloud_sms_register_template_id: 3910922   #短信模版
   config_env: dev                 # dev 调试环境 注册环节不发短信，默认验证码9999
-  rongcloud_app_key: eeeeeee
+  rongcloud_app_key: eeeeee
   rongcloud_app_secret: eeeeeee
   rongcloud_api_url: api-cn.ronghub.com  # rongcloud api_url
   rongcloud_default_portrait_url: http://www.rongcloud.cn/images/icon-57.png        #登录注册默认头像地址
@@ -132,12 +132,10 @@ sealtalk-config:
   db_port: 7306
 
 
-debug: true
-
 easemob.config:
-  appkey: "easemob-demo#restys2"
+  appkey: "appkey"
   connectTimout: 20s
   readTimout: 20s
-  clientId: "YXA6wTmvpwcjRZ6XcRwbLydSfQ"
-  clientSecret: "YXA628Y3NvTdHrUJ1Tip1DE79isu4nA"
+  clientId: "id"
+  clientSecret: "clientSecret"
   restBase: "https://a1.easemob.com"

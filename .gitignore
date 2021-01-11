@@ -25,3 +25,4 @@
 *.iml
 .gitignore.swp
 !/release.properties
+*move.yml
