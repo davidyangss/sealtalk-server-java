@@ -109,8 +109,8 @@ sealtalk-config:
   auth_cookie_max_age: 8640000    #  auth_cookie有效期单位秒 8640000=100天
   rongcloud_sms_register_template_id: 3910922   #短信模版
   config_env: dev                 # dev 调试环境 注册环节不发短信，默认验证码9999
-  rongcloud_app_key: 82hegw5u81y1x
-  rongcloud_app_secret: sjAEKRsJsGt
+  rongcloud_app_key: p5tvi9dspeip4
+  rongcloud_app_secret: YKVFyXcGNysN
   rongcloud_api_url: api-cn.ronghub.com  # rongcloud api_url
   rongcloud_default_portrait_url: http://www.rongcloud.cn/images/icon-57.png        #登录注册默认头像地址
   qiniu_access_key: ctk1VIyQlx5CFr_EQMqrQkF5c1PKGuqC2SNTR749
