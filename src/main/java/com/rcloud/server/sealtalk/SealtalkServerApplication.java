@@ -1,17 +1,19 @@
 package com.rcloud.server.sealtalk;
 
+import com.easemob.im.integration.IntegrationConfig;
 import com.rcloud.server.sealtalk.util.SpringContextUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @EnableTransactionManagement
-@Import(SpringContextUtil.class)
+@Import({SpringContextUtil.class, IntegrationConfig.class})
 @SpringBootApplication
 @EnableScheduling
 @MapperScan("com.rcloud.server.sealtalk.dao")
