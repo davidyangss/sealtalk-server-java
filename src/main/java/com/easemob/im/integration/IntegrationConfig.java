@@ -5,6 +5,7 @@ import com.easemob.im.hx.Appkey;
 import com.easemob.im.hx.GrantType;
 import com.easemob.im.relay.EasemobApi;
 import com.easemob.im.relay.EasemobApiProvider;
+import com.easemob.im.relay.api.http.ApiHttp;
 import com.easemob.im.relay.api.http.HttpClientCustomizers;
 import lombok.Data;
 import org.springframework.beans.factory.ObjectProvider;
@@ -33,7 +34,7 @@ public class IntegrationConfig {
     String clientId;
     String clientSecret;
 
-    String restBase;
+    ApiHttp restBase;
 
 
     @Bean
