@@ -334,6 +334,7 @@ public class UserManager extends BaseManager {
                 String easemobId = N3d.encode(u.getId());
                 AccessToken accessToken = easemobApi.getUserTokenOrRegister(AccessSecret.builder()
                             .grantType(GrantType.PASSWORD)
+                            .nickname(u.getNickname())
                             .username(easemobId)
                             .password(password)
                             .build()
@@ -347,6 +348,7 @@ public class UserManager extends BaseManager {
                 users.setId(u.getId());
                 assert accessToken != null;
                 users.setEasemobToken(accessToken.getAccessToken());
+                users.setEasemobId(easemobId);
                 users.setUpdatedAt(new Date());
                 usersService.updateByPrimaryKeySelective(users);
 
@@ -423,6 +425,7 @@ public class UserManager extends BaseManager {
             // 如果get token返回404，用户不存在，请注册环信，然后进一步获取
             AccessToken accessToken = easemobApi.getUserTokenOrRegister(AccessSecret.builder()
                         .grantType(GrantType.PASSWORD)
+                        .nickname(u.getNickname())
                         .username(easemobId)
                         .password(password)
                         .build()
@@ -433,6 +436,7 @@ public class UserManager extends BaseManager {
             users.setId(u.getId());
             assert accessToken != null;
             users.setEasemobToken(accessToken.getAccessToken());
+            users.setEasemobId(easemobId);
             users.setUpdatedAt(new Date());
             usersService.updateByPrimaryKeySelective(users);
         }

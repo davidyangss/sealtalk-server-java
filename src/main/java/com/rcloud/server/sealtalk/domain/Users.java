@@ -1,9 +1,13 @@
 package com.rcloud.server.sealtalk.domain;
 
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
+@ToString
 @Table(name = "users")
 public class Users implements Serializable {
 
@@ -49,6 +53,9 @@ public class Users implements Serializable {
 
     @Column(name="easemobToken")
     private String easemobToken;
+
+    @Column(name="easemobId")
+    private String easemobId;
 
     private String gender;
 
@@ -385,29 +392,11 @@ public class Users implements Serializable {
         this.deletedAt = deletedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", region='" + region + '\'' +
-                ", phone='" + phone + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", portraitUri='" + portraitUri + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", passwordSalt='" + passwordSalt + '\'' +
-                ", rongCloudToken='" + rongCloudToken + '\'' +
-                ", gender='" + gender + '\'' +
-                ", stAccount='" + stAccount + '\'' +
-                ", phoneVerify=" + phoneVerify +
-                ", stSearchVerify=" + stSearchVerify +
-                ", friVerify=" + friVerify +
-                ", groupVerify=" + groupVerify +
-                ", pokeStatus=" + pokeStatus +
-                ", groupCount=" + groupCount +
-                ", timestamp=" + timestamp +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", deletedAt=" + deletedAt +
-                '}';
+    public String getEasemobId() {
+        return easemobId;
+    }
+
+    public void setEasemobId(String easemobId) {
+        this.easemobId = easemobId;
     }
 }

@@ -161,6 +161,8 @@ CREATE TABLE `users`
     `passwordHash`   char(40)         NOT NULL,
     `passwordSalt`   char(4)          NOT NULL,
     `rongCloudToken` varchar(256)     NOT NULL DEFAULT '',
+    `easemobToken`   varchar(256)     NOT NULL DEFAULT '',
+    `easemobId`      varchar(256)     NOT NULL DEFAULT '',
     `gender`         varchar(32)      NOT NULL DEFAULT 'male',
     `stAccount`      varchar(32)      NOT NULL DEFAULT '',
     `phoneVerify`    int(10) unsigned NOT NULL DEFAULT '1',

@@ -13,6 +13,8 @@
     <result column="passwordHash" jdbcType="CHAR" property="passwordHash" />
     <result column="passwordSalt" jdbcType="CHAR" property="passwordSalt" />
     <result column="rongCloudToken" jdbcType="VARCHAR" property="rongCloudToken" />
+    <result column="easemobToken" jdbcType="VARCHAR" property="easemobToken" />
+    <result column="easemobId" jdbcType="VARCHAR" property="easemobId" />
     <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="stAccount" jdbcType="VARCHAR" property="stAccount" />
     <result column="phoneVerify" jdbcType="INTEGER" property="phoneVerify" />
