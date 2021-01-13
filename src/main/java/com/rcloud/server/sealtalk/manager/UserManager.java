@@ -1,5 +1,8 @@
 package com.rcloud.server.sealtalk.manager;
 
+import com.easemob.im.hx.*;
+import com.easemob.im.relay.EasemobApi;
+import com.easemob.im.relay.api.http.GeneralException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableList;
 import com.qiniu.util.Auth;
@@ -23,6 +26,7 @@ import io.rong.models.Result;
 import io.rong.models.response.BlackListResult;
 import io.rong.models.response.TokenResult;
 import io.rong.models.user.UserModel;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,7 +39,9 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Mono;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.Assert;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
@@ -90,6 +96,9 @@ public class UserManager extends BaseManager {
 
     @Autowired
     private HttpClient httpClient;
+
+    @Autowired
+    EasemobApi easemobApi;
 
     /**
      * 向手机发送验证码
@@ -278,10 +287,7 @@ public class UserManager extends BaseManager {
             throw new ServiceException(ErrorCode.PHONE_ALREADY_REGISTERED);
         }
         //如果没有注册过，密码hash
-        int salt = RandomUtil.randomBetween(1000, 9999);
-        String hashStr = MiscUtils.hash(password, salt);
-
-        Users u = register0(nickname, verificationCodes.getRegion(), verificationCodes.getPhone(), salt, hashStr);
+        Users u = register0(nickname, verificationCodes.getRegion(), verificationCodes.getPhone(), password);
 
         //缓存nickname
         CacheUtil.set(CacheUtil.NICK_NAME_CACHE_PREFIX + u.getId(), u.getNickname());
@@ -296,14 +302,16 @@ public class UserManager extends BaseManager {
      * @param nickname
      * @param region
      * @param phone
-     * @param salt
-     * @param hashStr
      * @return
      */
-    private Users register0(String nickname, String region, String phone, int salt, String hashStr) {
+    private Users register0(String nickname, String region, String phone, String password) {
         return transactionTemplate.execute(new TransactionCallback<Users>() {
+            @SneakyThrows
             @Override
             public Users doInTransaction(TransactionStatus transactionStatus) {
+                int salt = RandomUtil.randomBetween(1000, 9999);
+                String hashStr = MiscUtils.hash(password, salt);
+
                 //插入user表
                 Users u = new Users();
                 u.setNickname(nickname);
@@ -322,6 +330,25 @@ public class UserManager extends BaseManager {
                 DataVersions dataVersions = new DataVersions();
                 dataVersions.setUserId(u.getId());
                 dataVersionsService.saveSelective(dataVersions);
+
+                String easemobId = N3d.encode(u.getId());
+                AccessToken accessToken = easemobApi.getUserTokenOrRegister(AccessSecret.builder()
+                            .grantType(GrantType.PASSWORD)
+                            .username(easemobId)
+                            .password(password)
+                            .build()
+                        )
+                        .doOnNext(tt -> {
+                            log.info("Got user token, it = {}", tt);
+                        })
+                        .block();
+
+                Users users = new Users();
+                users.setId(u.getId());
+                assert accessToken != null;
+                users.setEasemobToken(accessToken.getAccessToken());
+                users.setUpdatedAt(new Date());
+                usersService.updateByPrimaryKeySelective(users);
 
                 return u;
             }
@@ -388,6 +415,27 @@ public class UserManager extends BaseManager {
             log.error("Error sync user's group list error:" + e.getMessage(), e);
         }
 
+        String easemobId = N3d.encode(u.getId());
+
+        String easemobToken = u.getEasemobToken();
+        if (StringUtils.isEmpty(easemobToken)) {
+            // 对于老用户，可能没有被注册到环信
+            // 如果get token返回404，用户不存在，请注册环信，然后进一步获取
+            AccessToken accessToken = easemobApi.getUserTokenOrRegister(AccessSecret.builder()
+                        .grantType(GrantType.PASSWORD)
+                        .username(easemobId)
+                        .password(password)
+                        .build()
+            ).block();
+
+            //获取后根据userId更新表中token
+            Users users = new Users();
+            users.setId(u.getId());
+            assert accessToken != null;
+            users.setEasemobToken(accessToken.getAccessToken());
+            users.setUpdatedAt(new Date());
+            usersService.updateByPrimaryKeySelective(users);
+        }
 
         String token = u.getRongCloudToken();
         if (StringUtils.isEmpty(token)) {

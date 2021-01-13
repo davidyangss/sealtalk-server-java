@@ -47,6 +47,9 @@ public class Users implements Serializable {
     @Column(name="rongCloudToken")
     private String rongCloudToken;
 
+    @Column(name="easemobToken")
+    private String easemobToken;
+
     private String gender;
 
     @Column(name="stAccount")
@@ -204,6 +207,14 @@ public class Users implements Serializable {
      */
     public void setRongCloudToken(String rongCloudToken) {
         this.rongCloudToken = rongCloudToken;
+    }
+
+    public String getEasemobToken() {
+        return easemobToken;
+    }
+
+    public void setEasemobToken(String easemobToken){
+        this.easemobToken = easemobToken;
     }
 
     /**

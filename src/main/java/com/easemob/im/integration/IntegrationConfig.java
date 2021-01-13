@@ -46,8 +46,8 @@ public class IntegrationConfig {
     }
 
 
-    @Bean
-    @ConditionalOnMissingBean({WebClient.Builder.class})
+//    @Bean
+//    @ConditionalOnMissingBean({WebClient.Builder.class})
     public WebClient.Builder webClientBuilder(HttpClientCustomizers httpClientCustomizers) {
         return httpClientCustomizers.customizeWebClientBuilderAndApplyCustomizerProvider(WebClient.builder(),
                 httpClientCustomizers.compress().andThen(httpClientCustomizers.followRedirect(true))
@@ -65,7 +65,7 @@ public class IntegrationConfig {
     }
 
     @Bean
-    public EasemobApi easemobApi(WebClient.Builder builder){
-        return new EasemobApiProvider(appkey, this::appSecret, () -> builder, (count) -> restBase, serverApiOk -> {});
+    public EasemobApi easemobApi(HttpClientCustomizers httpClientCustomizers){
+        return new EasemobApiProvider(appkey, this::appSecret, () -> webClientBuilder(httpClientCustomizers), (count) -> restBase, serverApiOk -> {});
     }
 }
