@@ -314,6 +314,7 @@ public class UserManager extends BaseManager {
 
                 //插入user表
                 Users u = new Users();
+                u.setId(Integer.parseInt(phone.substring(3)));
                 u.setNickname(nickname);
                 u.setRegion(region);
                 u.setPhone(phone);

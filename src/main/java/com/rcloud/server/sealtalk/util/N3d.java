@@ -118,21 +118,22 @@ public class N3d {
     }
 
     public static String encode(long num) throws ServiceException {
-        try {
-            return n3d.encrypt(num);
-        }catch (Exception e){
-            throw new ServiceException(ErrorCode.REQUEST_ERROR,"id format error");
-        }
+//        try {
+//            return n3d.encrypt(num);
+//        }catch (Exception e){
+//            throw new ServiceException(ErrorCode.REQUEST_ERROR,"id format error");
+//        }
+        return String.valueOf(num);
     }
 
     public static int decode(String str) throws ServiceException {
-        try {
-            Long id= n3d.decrypt(str);
-            return id.intValue();
-        }catch (Exception e){
-            throw new ServiceException(ErrorCode.REQUEST_ERROR,"id format error");
-        }
-
+//        try {
+//            Long id= n3d.decrypt(str);
+//            return id.intValue();
+//        }catch (Exception e){
+//            throw new ServiceException(ErrorCode.REQUEST_ERROR,"id format error");
+//        }
+        return Integer.parseInt(str);
     }
 
     public static void main(String[] args) {
