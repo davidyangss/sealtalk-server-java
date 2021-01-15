@@ -14,6 +14,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.web.reactive.function.client.ReactorNettyHttpClientMapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorResourceFactory;
@@ -26,6 +29,7 @@ import java.time.Duration;
 @ConfigurationProperties("easemob.config")
 @Data
 @Component
+@EnableCaching
 public class IntegrationConfig {
     Appkey appkey;
     Duration connectTimout = Duration.ofSeconds(30);
@@ -35,6 +39,9 @@ public class IntegrationConfig {
     String clientSecret;
 
     ApiHttp restBase;
+
+    @Autowired
+    CacheManager cacheManager;
 
 
     @Bean
@@ -67,6 +74,9 @@ public class IntegrationConfig {
 
     @Bean
     public EasemobApi easemobApi(HttpClientCustomizers httpClientCustomizers){
-        return new EasemobApiProvider(appkey, this::appSecret, () -> webClientBuilder(httpClientCustomizers), (count) -> restBase, serverApiOk -> {});
+        EasemobApiProvider provider = new EasemobApiProvider(appkey, this::appSecret, () -> webClientBuilder(httpClientCustomizers), (count) -> restBase, serverApiOk -> {});
+        provider.setCacheManager(cacheManager);
+
+        return provider;
     }
 }
