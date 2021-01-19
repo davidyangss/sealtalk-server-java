@@ -58,17 +58,20 @@ public class IntegrationConfig {
                                  ObjectProvider<ReactorResourceFactory> resourceFactoryProvider){
         HttpClientCustomizers httpClientCustomizers = new HttpClientCustomizers(mapperProvider);
         WebClientCustomizers webClientCustomizers = new WebClientCustomizers(webClientCustomizerProvider, resourceFactoryProvider, httpClientCustomizers);
-        EasemobApiProvider provider = new EasemobApiProvider(appkey, this::appSecret,
-                () -> webClientCustomizers.customWebClientBuilder(
+
+        return EasemobApiProvider.builder()
+                .appkey(appkey)
+                .accessSecretSupplier(this::appSecret)
+                .webClientBuilderSupplier(() -> webClientCustomizers.customWebClientBuilder(
                         httpClientCustomizers.compress()
                                 .andThen(httpClientCustomizers.readTimout(readTimout))
                                 .andThen(httpClientCustomizers.connectTimout(connectTimout))
                                 .andThen(httpClientCustomizers.followRedirect(true)),
-                        webClientCustomizers.springWebClientCustomizerConfigure()).apply(WebClient.builder()),
-                (count) -> restBase, serverApiOk -> {});
-        provider.setCacheManager(cacheManager);
-        provider.setWebClientCustomizers(webClientCustomizers);
-
-        return provider;
+                        webClientCustomizers.springWebClientCustomizerConfigure()).apply(WebClient.builder()))
+                .restBase((count) -> restBase)
+                .serverApiOkConsumer(serverApiOk -> {})
+                .cacheManager(cacheManager)
+                .webClientCustomizers(webClientCustomizers)
+                .build();
     }
 }
