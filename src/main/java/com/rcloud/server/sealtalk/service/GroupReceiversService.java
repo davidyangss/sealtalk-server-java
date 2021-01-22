@@ -2,7 +2,6 @@ package com.rcloud.server.sealtalk.service;
 
 import com.rcloud.server.sealtalk.dao.GroupReceiversMapper;
 import com.rcloud.server.sealtalk.domain.GroupReceivers;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import tk.mybatis.mapper.common.Mapper;

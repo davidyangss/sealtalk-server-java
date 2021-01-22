@@ -5,7 +5,6 @@ import com.rcloud.server.sealtalk.interceptor.ServerApiParamHolder;
 import com.rcloud.server.sealtalk.model.ServerApiParams;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: Jianlu.Yu

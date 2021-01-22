@@ -1,8 +1,6 @@
 package com.rcloud.server.sealtalk.controller.param;
 
-import io.swagger.annotations.ApiParam;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @Author: Jianlu.Yu

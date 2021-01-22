@@ -1,9 +1,6 @@
 package com.rcloud.server.sealtalk.model.dto;
 
 import lombok.Data;
-import org.omg.CORBA.OBJ_ADAPTER;
-
-import javax.persistence.Column;
 
 /**
  * @Author: Jianlu.Yu

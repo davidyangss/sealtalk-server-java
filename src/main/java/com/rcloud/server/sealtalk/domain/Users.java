@@ -1,11 +1,10 @@
 package com.rcloud.server.sealtalk.domain;
 
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @ToString
 @Table(name = "users")

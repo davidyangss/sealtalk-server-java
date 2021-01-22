@@ -1,8 +1,9 @@
 package com.rcloud.server.sealtalk.domain;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "verification_violations")
 public class VerificationViolations implements Serializable {

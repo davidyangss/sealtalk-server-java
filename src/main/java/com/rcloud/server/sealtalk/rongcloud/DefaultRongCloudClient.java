@@ -1,7 +1,6 @@
 package com.rcloud.server.sealtalk.rongcloud;
 
 import com.rcloud.server.sealtalk.configuration.SealtalkConfig;
-import com.rcloud.server.sealtalk.constant.Constants;
 import com.rcloud.server.sealtalk.domain.Groups;
 import com.rcloud.server.sealtalk.exception.ServiceException;
 import com.rcloud.server.sealtalk.rongcloud.message.*;

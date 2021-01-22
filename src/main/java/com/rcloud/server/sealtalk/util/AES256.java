@@ -1,13 +1,14 @@
 package com.rcloud.server.sealtalk.util;
 
-import java.security.SecureRandom;
-import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Base64;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
+import java.security.SecureRandom;
+import java.security.Security;
 
 /**
  * @Author: xiuwei.nie

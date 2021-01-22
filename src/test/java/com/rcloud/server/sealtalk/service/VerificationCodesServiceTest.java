@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @Author: Jianlu.Yu

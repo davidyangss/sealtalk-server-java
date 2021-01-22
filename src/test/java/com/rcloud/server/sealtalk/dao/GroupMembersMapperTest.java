@@ -3,7 +3,6 @@ package com.rcloud.server.sealtalk.dao;
 import com.rcloud.server.sealtalk.constant.GroupRole;
 import com.rcloud.server.sealtalk.domain.GroupMembers;
 import com.rcloud.server.sealtalk.exception.ServiceException;
-import com.rcloud.server.sealtalk.util.JacksonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author: Jianlu.Yu

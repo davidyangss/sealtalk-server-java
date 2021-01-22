@@ -1,6 +1,5 @@
 package com.rcloud.server.sealtalk.model.dto;
 
-import com.rcloud.server.sealtalk.domain.Groups;
 import lombok.Data;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.rcloud.server.sealtalk.dao;
 
 import com.rcloud.server.sealtalk.domain.GroupReceivers;
-import com.rcloud.server.sealtalk.domain.Groups;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 

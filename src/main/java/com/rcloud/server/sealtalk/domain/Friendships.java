@@ -1,8 +1,11 @@
 package com.rcloud.server.sealtalk.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "friendships")
 public class Friendships implements Serializable {

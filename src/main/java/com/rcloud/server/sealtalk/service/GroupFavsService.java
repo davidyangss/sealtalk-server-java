@@ -2,7 +2,6 @@ package com.rcloud.server.sealtalk.service;
 
 import com.rcloud.server.sealtalk.dao.GroupFavsMapper;
 import com.rcloud.server.sealtalk.domain.GroupFavs;
-import com.rcloud.server.sealtalk.util.ValidateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;

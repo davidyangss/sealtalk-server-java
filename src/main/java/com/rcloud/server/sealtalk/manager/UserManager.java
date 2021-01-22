@@ -1,8 +1,9 @@
 package com.rcloud.server.sealtalk.manager;
 
-import com.easemob.im.hx.*;
+import com.easemob.im.hx.AccessSecret;
+import com.easemob.im.hx.AccessToken;
+import com.easemob.im.hx.GrantType;
 import com.easemob.im.relay.EasemobApi;
-import com.easemob.im.relay.api.http.GeneralException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableList;
 import com.qiniu.util.Auth;
@@ -39,9 +40,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import reactor.core.publisher.Mono;
 import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.Assert;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;

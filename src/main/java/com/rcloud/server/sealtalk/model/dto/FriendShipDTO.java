@@ -2,9 +2,6 @@ package com.rcloud.server.sealtalk.model.dto;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 /**
  * @Author: Jianlu.Yu
  * @Date: 2020/8/24

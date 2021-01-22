@@ -1,6 +1,5 @@
 package com.rcloud.server.sealtalk.model.dto;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 /**

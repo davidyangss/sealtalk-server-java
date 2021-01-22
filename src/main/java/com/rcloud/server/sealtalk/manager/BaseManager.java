@@ -1,6 +1,7 @@
 package com.rcloud.server.sealtalk.manager;
 
 import com.rcloud.server.sealtalk.configuration.SealtalkConfig;
+
 import javax.annotation.Resource;
 
 /**

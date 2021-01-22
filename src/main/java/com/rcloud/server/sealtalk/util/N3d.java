@@ -1,7 +1,6 @@
 package com.rcloud.server.sealtalk.util;
 
 import com.rcloud.server.sealtalk.configuration.SealtalkConfig;
-import com.rcloud.server.sealtalk.constant.ErrorCode;
 import com.rcloud.server.sealtalk.exception.ServiceException;
 
 public class N3d {
