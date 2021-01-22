@@ -116,7 +116,7 @@ public class N3d {
         return result;
     }
 
-    public static String encode(long num) throws ServiceException {
+    public static String encode(long num) {
 //        try {
 //            return n3d.encrypt(num);
 //        }catch (Exception e){
@@ -125,7 +125,7 @@ public class N3d {
         return String.valueOf(num);
     }
 
-    public static int decode(String str) throws ServiceException {
+    public static int decode(String str) {
 //        try {
 //            Long id= n3d.decrypt(str);
 //            return id.intValue();

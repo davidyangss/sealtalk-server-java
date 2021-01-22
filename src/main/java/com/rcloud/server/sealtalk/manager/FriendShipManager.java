@@ -1,5 +1,7 @@
 package com.rcloud.server.sealtalk.manager;
 
+import com.easemob.im.hx.HXResponse;
+import com.easemob.im.relay.EasemobApi;
 import com.google.common.collect.ImmutableList;
 import com.rcloud.server.sealtalk.constant.Constants;
 import com.rcloud.server.sealtalk.constant.ErrorCode;
@@ -66,6 +68,9 @@ public class FriendShipManager extends BaseManager {
 
     @Autowired
     private TransactionTemplate transactionTemplate;
+
+    @Autowired
+    EasemobApi easemobApi;
 
     /**
      * 发起添加好友
@@ -303,6 +308,7 @@ public class FriendShipManager extends BaseManager {
                 friendshipsFC.setStatus(fcStatus);
                 friendshipsFC.setMessage(message);
                 friendshipsService.updateByPrimaryKeySelective(friendshipsFC);
+
                 return true;
             }
         });
@@ -467,6 +473,11 @@ public class FriendShipManager extends BaseManager {
                 }
                 //更新对方Friendship好友关系表中的状态为FRIENDSHIP_AGREED
                 friendshipsService.updateAgreeStatus(friendId, currentUserId, timestamp, null);
+
+
+                HXResponse hxResponse = easemobApi.blockRun(token -> easemobApi.addFriend(token, N3d.encode(currentUserId), N3d.encode(friendId)));
+                log.info("Hx add friend success, the response = {}", hxResponse);
+
                 return true;
             }
         });
@@ -551,6 +562,8 @@ public class FriendShipManager extends BaseManager {
         Users u = usersService.getByPrimaryKey(friendId);
 
         if (u != null) {
+            easemobApi.blockRun(token -> easemobApi.delFriend(token, N3d.encode(currentUserId), N3d.encode(friendId)));
+
             //调用融云黑名单接口新增,删除好友（请求），相当于告诉融云服务端把删除的好友加入黑名单不在接收他发的消息
             rongCloudClient.addUserBlackList(N3d.encode(currentUserId), new String[]{N3d.encode(friendId)});
             //同时插入或更新本地黑名单表

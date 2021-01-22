@@ -28,6 +28,15 @@ mybatis:
 
 logging:
   config: classpath:logback-config.xml
+  level:
+    root: INFO
+    com:
+      easemob:
+        im:
+          hx: DEBUG
+          relay:
+            api:
+              http: DEBUG
 
 
 sealtalk:
