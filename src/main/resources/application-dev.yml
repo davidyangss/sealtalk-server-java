@@ -137,7 +137,7 @@ sealtalk-config:
   db_name: sealtalk
   db_user: root
   db_password: root
-  db_host: turn4
+  db_host: 127.0.0.1
   db_port: 7306
 
 

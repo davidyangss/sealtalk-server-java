@@ -1,5 +1,7 @@
 package com.rcloud.server.sealtalk.manager;
 
+import com.easemob.im.hx.Group;
+import com.easemob.im.relay.EasemobApi;
 import com.google.common.collect.ImmutableList;
 import com.rcloud.server.sealtalk.constant.*;
 import com.rcloud.server.sealtalk.domain.*;
@@ -13,6 +15,7 @@ import com.rcloud.server.sealtalk.service.*;
 import com.rcloud.server.sealtalk.util.*;
 import io.rong.models.Result;
 import io.rong.models.message.GroupMessage;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,10 +27,12 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Mono;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.rcloud.server.sealtalk.util.N3d.encode;
 
@@ -74,6 +79,10 @@ public class GroupManager extends BaseManager {
 
     @Autowired
     private TransactionTemplate transactionTemplate;
+
+    @Autowired
+    EasemobApi easemobApi;
+
 
 
     /**
@@ -159,7 +168,25 @@ public class GroupManager extends BaseManager {
         groups.setUpdatedAt(groups.getCreatedAt());
         // 创建群时，默认开启群保护
         groups.setMemberProtection(1);
-        groupsService.saveSelective(groups);
+
+        Group group = easemobApi.blockRun(token -> easemobApi.createChatgroup(token, Group.builder()
+                .owner(N3d.encode(currentUserId))
+                .groupName(groupName)
+                .desc(groupName)
+                .isPublic(true)
+                .allowInvites(true)
+                .membersOnly(true)
+                .members(verifyNoNeedUserList.stream().map(N3d::encode).collect(Collectors.toList()))
+                .build()));
+        groups.setEasemobGroupId(group.getGroupId());
+
+        try{
+            groupsService.saveSelective(groups);
+        }catch (Exception e){
+            easemobApi.blockRun(token -> easemobApi.deleteChatgroup(token, group.getGroupId()));
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
 
         List<Integer> megerUserIdList = new ArrayList<>(verifyNoNeedUserList);
         megerUserIdList.add(currentUserId);
@@ -540,6 +567,10 @@ public class GroupManager extends BaseManager {
                 example.createCriteria().andEqualTo("groupId", groupId)
                         .andIn("receiverId", userIds);
                 groupReceiversService.updateByExampleSelective(groupReceivers, example);
+
+                easemobApi.blockList(token -> easemobApi.addChatGroupMember(token, groups.getEasemobGroupId(),
+                        userIds.stream().map(N3d::encode).toArray(String[]::new)));
+
                 return true;
             }
         });
@@ -1629,6 +1660,7 @@ public class GroupManager extends BaseManager {
 
         try {
             Result result = rongCloudClient.dismiss(N3d.encode(currentUserId), encodedGroupId);
+            easemobApi.blockRun(token -> easemobApi.deleteChatgroup(token, groups.getEasemobGroupId()));
             if (!Constants.CODE_OK.equals(result.getCode())) {
                 log.error("Error: dismiss group failed on IM server, code: {},errorMessage: {}", result.getCode(), result.getErrorMessage());
                 throw new ServiceException(ErrorCode.QUIT_IM_SERVER_ERROR);
@@ -1788,6 +1820,8 @@ public class GroupManager extends BaseManager {
 
         //发送群组通知消息 TODO
         sendGroupNotificationMessageBySystem(groupId, messageData, currentUserId, GroupOperationType.QUIT);
+
+        easemobApi.blockRun(token -> easemobApi.deleteChatGroupMember(token, groups.getEasemobGroupId(), N3d.encode(currentUserId)));
 
         //调用融云退群接口
         try {
@@ -1972,6 +2006,8 @@ public class GroupManager extends BaseManager {
         messageData.put("timestamp", timestamp);
         //发送群组通知 TODO
         sendGroupNotificationMessageBySystem(groupId, messageData, currentUserId, GroupOperationType.KICKED);
+
+        easemobApi.blockList(token -> easemobApi.deleteChatGroupMember(token, groups.getEasemobGroupId(), encodeMemberIds));
 
         //调用融云退群接口
         try {

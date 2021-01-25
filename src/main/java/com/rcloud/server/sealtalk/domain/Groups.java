@@ -50,6 +50,9 @@ public class Groups implements Serializable {
     @Column(name = "creatorId")
     private Integer creatorId;
 
+    @Column(name = "easemobGroupId")
+    private String easemobGroupId;
+
     /**
      * 开启群认证 0-开启 1-关闭
      */
@@ -228,5 +231,13 @@ public class Groups implements Serializable {
 
     public void setBulletin(String bulletin) {
         this.bulletin = bulletin;
+    }
+
+    public String getEasemobGroupId() {
+        return easemobGroupId;
+    }
+
+    public void setEasemobGroupId(String easemobGroupId) {
+        this.easemobGroupId = easemobGroupId;
     }
 }

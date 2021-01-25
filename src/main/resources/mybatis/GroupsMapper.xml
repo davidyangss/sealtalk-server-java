@@ -11,6 +11,7 @@
     <result column="memberCount" jdbcType="INTEGER" property="memberCount" />
     <result column="maxMemberCount" jdbcType="INTEGER" property="maxMemberCount" />
     <result column="creatorId" jdbcType="INTEGER" property="creatorId" />
+    <result column="easemobGroupId" jdbcType="VARCHAR" property="easemobGroupId" />
     <result column="certiStatus" jdbcType="INTEGER" property="certiStatus" />
     <result column="isMute" jdbcType="INTEGER" property="isMute" />
     <result column="clearStatus" jdbcType="INTEGER" property="clearStatus" />
