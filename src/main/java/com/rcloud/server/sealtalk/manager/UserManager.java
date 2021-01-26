@@ -399,7 +399,7 @@ public class UserManager extends BaseManager {
                 Groups groups = gm.getGroups();
                 if (groups != null) {
                     groupsList.add(groups);
-                    idNamePariMap.put(N3d.encode(groups.getId()), groups.getName());
+                    idNamePariMap.put(groups.getEasemobGroupId() == null ? N3d.encode(groups.getId()) : groups.getEasemobGroupId(), groups.getName());
                 }
             }
         }

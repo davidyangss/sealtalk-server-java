@@ -210,7 +210,7 @@ public class GroupManager extends BaseManager {
 
         try {
             //调用融云接口创建群组
-            Result result = rongCloudClient.createGroup(encode(groups.getId()), encodeMemberIds, groupName);
+            Result result = rongCloudClient.createGroup(groups.getEasemobGroupId(), encodeMemberIds, groupName);
             if (Constants.CODE_OK.equals(result.getCode())) {
                 try {
                     //如果成功则调用融云接口发送群组通知
@@ -575,7 +575,7 @@ public class GroupManager extends BaseManager {
             }
         });
         //调用融云接口加入群组
-        rongCloudClient.joinGroup(MiscUtils.encodeIds(userIds), N3d.encode(groupId), groups.getName());
+        rongCloudClient.joinGroup(MiscUtils.encodeIds(userIds), groups.getEasemobGroupId(), groups.getName());
 
         //清除相关缓存
         for (Integer userId : userIds) {
@@ -1659,7 +1659,7 @@ public class GroupManager extends BaseManager {
         Result res = sendGroupNotificationMessageBySystem(groupId, messageData, currentUserId, GroupOperationType.DISMISS);
 
         try {
-            Result result = rongCloudClient.dismiss(N3d.encode(currentUserId), encodedGroupId);
+            Result result = rongCloudClient.dismiss(groups.getEasemobGroupId(), encodedGroupId);
             easemobApi.blockRun(token -> easemobApi.deleteChatgroup(token, groups.getEasemobGroupId()));
             if (!Constants.CODE_OK.equals(result.getCode())) {
                 log.error("Error: dismiss group failed on IM server, code: {},errorMessage: {}", result.getCode(), result.getErrorMessage());
@@ -1825,7 +1825,7 @@ public class GroupManager extends BaseManager {
 
         //调用融云退群接口
         try {
-            Result result = rongCloudClient.quitGroup(encodedMemberIds, encodedGroupId, groups.getName());
+            Result result = rongCloudClient.quitGroup(encodedMemberIds, groups.getEasemobGroupId(), groups.getName());
             if (result != null && !Constants.CODE_OK.equals(result.getCode())) {
                 log.error("Error: quit group failed on IM server, code: {}", result.getCode());
                 throw new ServiceException(ErrorCode.QUIT_IM_SERVER_ERROR);
@@ -2011,7 +2011,7 @@ public class GroupManager extends BaseManager {
 
         //调用融云退群接口
         try {
-            Result result = rongCloudClient.quitGroup(encodeMemberIds, encodeGroupId, groups.getName());
+            Result result = rongCloudClient.quitGroup(encodeMemberIds, groups.getEasemobGroupId(), groups.getName());
             if (!Constants.CODE_OK.equals(result.getCode())) {
                 log.error("Error: quit group failed on IM server, code: {}", result.getCode());
                 throw new ServiceException(ErrorCode.QUIT_IM_SERVER_ERROR);
