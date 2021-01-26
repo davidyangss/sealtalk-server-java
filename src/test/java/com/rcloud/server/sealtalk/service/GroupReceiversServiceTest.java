@@ -35,7 +35,7 @@ public class GroupReceiversServiceTest {
         List<GroupReceivers> groupReceiversList = new ArrayList<>();
         Integer requesterId = 113;
         Integer receiveId = 110;
-        Integer groupId = 27;
+        String groupId = "27";
         String groupName = "测试群for批量插入";
         for(int i=0;i<1003;i++){
             GroupReceivers gr = new GroupReceivers();

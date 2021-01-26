@@ -399,7 +399,7 @@ public class UserManager extends BaseManager {
                 Groups groups = gm.getGroups();
                 if (groups != null) {
                     groupsList.add(groups);
-                    idNamePariMap.put(groups.getEasemobGroupId() == null ? N3d.encode(groups.getId()) : groups.getEasemobGroupId(), groups.getName());
+                    idNamePariMap.put(groups.getEasemobGroupId() == null ? groups.getId() : groups.getEasemobGroupId(), groups.getName());
                 }
             }
         }
@@ -1071,7 +1071,7 @@ public class UserManager extends BaseManager {
             friendshipsList = friendshipsService.getFriendShipListWithUsers(currentUserId, version);
         }
 
-        List<Integer> groupIdList = new ArrayList<>();
+        List<String> groupIdList = new ArrayList<>();
         if (dataVersions.getGroupVersion() > version) {
             groupsList = groupMembersService.queryGroupMembersWithGroupByMemberId(currentUserId);
             if (!CollectionUtils.isEmpty(groupsList)) {
@@ -1194,14 +1194,14 @@ public class UserManager extends BaseManager {
         if(!CollectionUtils.isEmpty(groupsList)){
             for(GroupMembers groupMembers:groupsList){
                 SyncGroupDTO syncGroupDTO = new SyncGroupDTO();
-                syncGroupDTO.setGroupId(N3d.encode(groupMembers.getGroupId()));
+                syncGroupDTO.setGroupId(groupMembers.getGroupId());
                 syncGroupDTO.setDisplayName(groupMembers.getDisplayName());
                 syncGroupDTO.setIsDeleted(GroupMembers.IS_DELETED_YES.equals(groupMembers.getIsDeleted())?true:false);
                 syncGroupDTO.setRole(groupMembers.getRole());
                 Groups g = groupMembers.getGroups();
                 SyncGroupInnerDTO groupInnerDTO = new SyncGroupInnerDTO();
                 if(g!=null){
-                    groupInnerDTO.setId(N3d.encode(g.getId()));
+                    groupInnerDTO.setId(g.getId());
                     groupInnerDTO.setName(g.getName());
                     groupInnerDTO.setPortraitUri(g.getPortraitUri());
                     groupInnerDTO.setTimestamp(g.getTimestamp());
@@ -1220,7 +1220,7 @@ public class UserManager extends BaseManager {
         if(!CollectionUtils.isEmpty(groupMembersList)){
             for(GroupMembers groupMembers:groupMembersList){
                 SyncGroupMemberDTO syncGroupMemberDTO = new SyncGroupMemberDTO();
-                syncGroupMemberDTO.setGroupId(N3d.encode(groupMembers.getGroupId()));
+                syncGroupMemberDTO.setGroupId(groupMembers.getGroupId());
                 syncGroupMemberDTO.setDisplayName(groupMembers.getDisplayName());
                 syncGroupMemberDTO.setIsDeleted(GroupMembers.IS_DELETED_YES.equals(groupMembers.getIsDeleted())?true:false);
                 syncGroupMemberDTO.setMemberId(N3d.encode(groupMembers.getMemberId()));

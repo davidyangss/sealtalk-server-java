@@ -29,7 +29,7 @@
         -->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="userId" jdbcType="INTEGER" property="userId"/>
-        <result column="groupId" jdbcType="INTEGER" property="groupId"/>
+        <result column="groupId" jdbcType="CHAR" property="groupId"/>
         <result column="groupName" jdbcType="VARCHAR" property="groupName"/>
         <result column="groupPortraitUri" jdbcType="VARCHAR" property="groupPortraitUri"/>
         <result column="requesterId" jdbcType="INTEGER" property="requesterId"/>
@@ -140,7 +140,7 @@
         <foreach collection ="groupReceiverList" item="gr" index= "index" separator =",">
             (
             #{gr.userId,jdbcType=INTEGER},
-            #{gr.groupId,jdbcType=INTEGER},
+            #{gr.groupId,jdbcType=CHAR},
             #{gr.groupName,jdbcType=VARCHAR},
             #{gr.groupPortraitUri,jdbcType=VARCHAR},
             #{gr.requesterId,jdbcType=INTEGER},

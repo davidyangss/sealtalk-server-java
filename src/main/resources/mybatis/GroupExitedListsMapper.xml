@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="groupId" jdbcType="INTEGER" property="groupId" />
+    <result column="groupId" jdbcType="CHAR" property="groupId" />
     <result column="quitUserId" jdbcType="INTEGER" property="quitUserId" />
     <result column="quitNickname" jdbcType="VARCHAR" property="quitNickname" />
     <result column="quitPortraitUri" jdbcType="VARCHAR" property="quitPortraitUri" />

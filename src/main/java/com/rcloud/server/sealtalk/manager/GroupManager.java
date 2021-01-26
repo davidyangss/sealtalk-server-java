@@ -104,7 +104,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @return
      */
-    public Groups getGroup(Integer groupId) {
+    public Groups getGroup(String groupId) {
         return groupsService.getByPrimaryKey(groupId);
     }
 
@@ -179,6 +179,7 @@ public class GroupManager extends BaseManager {
                 .members(verifyNoNeedUserList.stream().map(N3d::encode).collect(Collectors.toList()))
                 .build()));
         groups.setEasemobGroupId(group.getGroupId());
+        groups.setId(group.getGroupId());
 
         try{
             groupsService.saveSelective(groups);
@@ -255,7 +256,7 @@ public class GroupManager extends BaseManager {
 
         //构建返回结果
         GroupAddStatusDTO groupAddStatusDTO = new GroupAddStatusDTO();
-        groupAddStatusDTO.setId(N3d.encode(groups.getId()));
+        groupAddStatusDTO.setId(groups.getId());
         groupAddStatusDTO.setUserStatus(userStatusDTOList);
         return groupAddStatusDTO;
     }
@@ -271,7 +272,7 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    private Result sendGroupNotificationMessageBySystem(Integer groupId, Map<String, Object> messageData, Integer operatorUserId, GroupOperationType groupOperationType) throws ServiceException {
+    private Result sendGroupNotificationMessageBySystem(String groupId, Map<String, Object> messageData, Integer operatorUserId, GroupOperationType groupOperationType) throws ServiceException {
 
         CustomerGroupNtfMessage customerGroupNtfMessage = new CustomerGroupNtfMessage();
         customerGroupNtfMessage.setOperatorUserId(N3d.encode(operatorUserId));
@@ -280,7 +281,7 @@ public class GroupManager extends BaseManager {
 
         GroupMessage groupMessage = new GroupMessage();
         groupMessage.setSenderId(Constants.GroupNotificationMessage_fromUserId);
-        groupMessage.setTargetId(new String[]{N3d.encode(groupId)});
+        groupMessage.setTargetId(new String[]{groupId});
         groupMessage.setObjectName(customerGroupNtfMessage.getType());
         groupMessage.setContent(customerGroupNtfMessage);
         return rongCloudClient.sendCustomerGroupNtfMessage(groupMessage);
@@ -310,7 +311,7 @@ public class GroupManager extends BaseManager {
      * @param type
      * @throws ServiceException
      */
-    private void sendGroupApplyMessage(Integer requesterId, List<Integer> operatorUserIdList, Integer targetGroupId, String targetGroupName, Integer status, Integer type) throws ServiceException {
+    private void sendGroupApplyMessage(Integer requesterId, List<Integer> operatorUserIdList, String targetGroupId, String targetGroupName, Integer status, Integer type) throws ServiceException {
 
         //构建消息内容
         CustomerGroupApplyMessage grpApplyMessage = new CustomerGroupApplyMessage();
@@ -321,7 +322,7 @@ public class GroupManager extends BaseManager {
 
         Map<String, Object> messageData = new HashMap<>();
         messageData.put("operatorNickname", requesterName);
-        messageData.put("targetGroupId", N3d.encode(targetGroupId));
+        messageData.put("targetGroupId", targetGroupId);
         messageData.put("targetGroupName", targetGroupName == null ? "" : targetGroupName);
         messageData.put("status", status);
         messageData.put("type", type);
@@ -432,7 +433,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param memberIds
      */
-    public List<UserStatusDTO> addMember(Integer currentUserId, Integer groupId, Integer[] memberIds) throws ServiceException {
+    public List<UserStatusDTO> addMember(Integer currentUserId, String groupId, Integer[] memberIds) throws ServiceException {
 
         //返回结果对象
         List<UserStatusDTO> userStatusDTOList = new ArrayList<>();
@@ -449,7 +450,7 @@ public class GroupManager extends BaseManager {
             hasManagerRole = false;
         }
 
-        Groups groups = groupsService.getByPrimaryKey(Integer.valueOf(groupId));
+        Groups groups = groupsService.getByPrimaryKey(groupId);
 
         if (groups == null) {
             throw new ServiceException(ErrorCode.EMPTY_GROUPID);
@@ -543,7 +544,7 @@ public class GroupManager extends BaseManager {
      * @param userIds
      * @param currentUserId
      */
-    private void addMember0(Integer groupId, List<Integer> userIds, Integer currentUserId) throws ServiceException {
+    private void addMember0(String groupId, List<Integer> userIds, Integer currentUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Groups groups = groupsService.getByPrimaryKey(groupId);
@@ -621,7 +622,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param encodedGroupId
      */
-    public void joinGroup(Integer currentUserId, Integer groupId, String encodedGroupId) throws ServiceException {
+    public void joinGroup(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -670,7 +671,7 @@ public class GroupManager extends BaseManager {
         CacheUtil.delete(CacheUtil.GROUP_MEMBERS_CACHE_PREFIX + groupId);
     }
 
-    private void doJoinGroup0(Integer currentUserId, Integer groupId, long timestamp, Groups groups) {
+    private void doJoinGroup0(Integer currentUserId, String groupId, long timestamp, Groups groups) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -693,7 +694,7 @@ public class GroupManager extends BaseManager {
      * @param timestamp
      * @param creatorId
      */
-    private void doBatchSaveOrUpdateGroupMemberInTransaction(Integer groupId, List<Integer> memberIdList, long timestamp, Integer creatorId) {
+    private void doBatchSaveOrUpdateGroupMemberInTransaction(String groupId, List<Integer> memberIdList, long timestamp, Integer creatorId) {
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -711,7 +712,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param memberProtection 成员保护模式: 0 关闭、1 开启
      */
-    public void setMemberProtection(Integer currentUserId, Integer groupId, Integer memberProtection) throws ServiceException {
+    public void setMemberProtection(Integer currentUserId, String groupId, Integer memberProtection) throws ServiceException {
 
         String operation = "openMemberProtection";
         if (memberProtection == 0) {
@@ -737,20 +738,20 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    private Result sendCustomerGroupNotificationMessage(Integer operatorId, Integer targetId, String operation) throws ServiceException {
+    private Result sendCustomerGroupNotificationMessage(Integer operatorId, String targetId, String operation) throws ServiceException {
 
-        return rongCloudClient.sendCustomerGroupNtfMessage(N3d.encode(operatorId), N3d.encode(targetId), operation);
+        return rongCloudClient.sendCustomerGroupNtfMessage(N3d.encode(operatorId), targetId, operation);
     }
 
 
-    private Result sendCustomerConNtfMessage(Integer operatorId, Integer targetId, String operation) throws ServiceException {
+    private Result sendCustomerConNtfMessage(Integer operatorId, String targetId, String operation) throws ServiceException {
 
-        return rongCloudClient.sendCustomerConNtfMessage(N3d.encode(operatorId), N3d.encode(targetId), operation);
+        return rongCloudClient.sendCustomerConNtfMessage(N3d.encode(operatorId), targetId, operation);
     }
 
-    private Result sendCustomerClearGroupMessage(Integer operatorId, Integer targetId, String operation, Long clearTimestamp) throws ServiceException {
+    private Result sendCustomerClearGroupMessage(Integer operatorId, String targetId, String operation, Long clearTimestamp) throws ServiceException {
 
-        return rongCloudClient.sendCustomerClearGroupMessage(N3d.encode(operatorId), N3d.encode(targetId), operation, clearTimestamp);
+        return rongCloudClient.sendCustomerClearGroupMessage(N3d.encode(operatorId), targetId, operation, clearTimestamp);
     }
 
 
@@ -793,7 +794,7 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public GroupMembers getMemberInfo(Integer groupId, Integer memberId) throws ServiceException {
+    public GroupMembers getMemberInfo(String groupId, Integer memberId) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, memberId);
 
@@ -816,7 +817,7 @@ public class GroupManager extends BaseManager {
      * @param alipay
      * @param memberDesc
      */
-    public void setMemberInfo(Integer groupId, Integer memberId, String groupNickname, String region, String phone, String weChat, String alipay, String[] memberDesc) throws ServiceException {
+    public void setMemberInfo(String groupId, Integer memberId, String groupNickname, String region, String phone, String weChat, String alipay, String[] memberDesc) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, memberId);
 
@@ -851,7 +852,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param clearStatus   清理选项 0-》关闭、 3-》清理 3 天前、 7-》清理 7 天前、 36-》清理 36 小时前
      */
-    public void setRegularClear(Integer currentUserId, Integer groupId, Integer clearStatus) throws ServiceException {
+    public void setRegularClear(Integer currentUserId, String groupId, Integer clearStatus) throws ServiceException {
 
         String operation = "openRegularClear";
 
@@ -894,9 +895,9 @@ public class GroupManager extends BaseManager {
      * @param muteStatus    禁言状态：0 关闭 1 开启
      * @param userIds       可发言用户，不传全员禁言，仅群组和管理员可发言
      */
-    public void setMuteAll(Integer currentUserId, Integer groupId, Integer muteStatus, Integer[] userIds) throws ServiceException {
+    public void setMuteAll(Integer currentUserId, String groupId, Integer muteStatus, Integer[] userIds) throws ServiceException {
 
-        String encodeGroupId = N3d.encode(groupId);
+        String encodeGroupId = groupId;
 
         if (Groups.MUTE_STATUS_CLOSE.equals(muteStatus)) {
             //如果是取消禁言
@@ -1010,7 +1011,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param certiStatus   认证状态： 0 开启(需要认证)、1 关闭（不需要认证）
      */
-    public void setCertification(Integer currentUserId, Integer groupId, Integer certiStatus) throws ServiceException {
+    public void setCertification(Integer currentUserId, String groupId, Integer certiStatus) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, currentUserId);
 
@@ -1031,7 +1032,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    public List<GroupMembers> getGroupMembers(Integer currentUserId, Integer groupId) throws ServiceException {
+    public List<GroupMembers> getGroupMembers(Integer currentUserId, String groupId) throws ServiceException {
 
         String membersJson = CacheUtil.get(CacheUtil.GROUP_MEMBERS_CACHE_PREFIX + groupId);
         if (!StringUtils.isEmpty(membersJson)) {
@@ -1076,7 +1077,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @return
      */
-    public Groups getGroupInfo(Integer groupId) throws ServiceException {
+    public Groups getGroupInfo(String groupId) throws ServiceException {
 
         String groupJson = CacheUtil.get(CacheUtil.GROUP_CACHE_PREFIX + groupId);
         if (groupJson != null) {
@@ -1100,7 +1101,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param displayName
      */
-    public void setDisPlayName(Integer currentUserId, Integer groupId, String displayName) throws ServiceException {
+    public void setDisPlayName(Integer currentUserId, String groupId, String displayName) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         GroupMembers groupMembers = new GroupMembers();
@@ -1129,7 +1130,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param portraitUri
      */
-    public void setGroupPortraitUri(Integer currentUserId, Integer groupId, String portraitUri) throws ServiceException {
+    public void setGroupPortraitUri(Integer currentUserId, String groupId, String portraitUri) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         Groups groups = new Groups();
         groups.setPortraitUri(portraitUri);
@@ -1166,7 +1167,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @return
      */
-    public GroupBulletins getBulletin(Integer groupId) {
+    public GroupBulletins getBulletin(String groupId) {
         return groupBulletinsService.getGroupBulletins(groupId);
     }
 
@@ -1177,7 +1178,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param bulletin
      */
-    public void setBulletin(Integer currentUserId, Integer groupId, String bulletin) throws ServiceException {
+    public void setBulletin(Integer currentUserId, String groupId, String bulletin) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         GroupBulletins groupBulletins = new GroupBulletins();
         groupBulletins.setGroupId(groupId);
@@ -1202,7 +1203,7 @@ public class GroupManager extends BaseManager {
         if (!StringUtils.isEmpty(bulletin) && !StringUtils.isEmpty(nickname)) {
             //发布群通知
             String content = "@所有人 " + bulletin;
-            rongCloudClient.sendBulletinNotification(N3d.encode(currentUserId), new String[]{N3d.encode(groupId)}, content, 1, null, "");
+            rongCloudClient.sendBulletinNotification(N3d.encode(currentUserId), new String[]{groupId}, content, 1, null, "");
         }
 
         return;
@@ -1215,7 +1216,7 @@ public class GroupManager extends BaseManager {
      * @param currentUserId
      * @param groupId
      */
-    public void fav(Integer currentUserId, Integer groupId) throws ServiceException {
+    public void fav(Integer currentUserId, String groupId) throws ServiceException {
 
         GroupFavs groupFavs = new GroupFavs();
         groupFavs.setUserId(currentUserId);
@@ -1250,7 +1251,7 @@ public class GroupManager extends BaseManager {
      * @param name
      * @param encodedGroupId
      */
-    public void rename(Integer currentUserId, Integer groupId, String name, String encodedGroupId) throws ServiceException {
+    public void rename(Integer currentUserId, String groupId, String name, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1321,7 +1322,7 @@ public class GroupManager extends BaseManager {
      * @param memberIds
      * @param encodedMemberIds
      */
-    public void batchRemoveManager(Integer currentUserId, Integer groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
+    public void batchRemoveManager(Integer currentUserId, String groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1341,7 +1342,7 @@ public class GroupManager extends BaseManager {
         } else {
             try {
                 //如果群设置是全员禁言，移除白名单
-                Result result = rongCloudClient.removeGroupWhiteList(N3d.encode(groupId), encodedMemberIds);
+                Result result = rongCloudClient.removeGroupWhiteList(groupId, encodedMemberIds);
 
                 if (Constants.CODE_OK.equals(result.getCode())) {
                     log.error("batchRemoveManager rongCloudClient removeWhiteList success");
@@ -1367,7 +1368,7 @@ public class GroupManager extends BaseManager {
      * @param groupOperationType
      * @throws ServiceException
      */
-    private void setGroupMemberRole(Integer groupId, Integer[] memberIds, GroupRole role, Integer currentUserId, GroupOperationType groupOperationType) throws ServiceException {
+    private void setGroupMemberRole(String groupId, Integer[] memberIds, GroupRole role, Integer currentUserId, GroupOperationType groupOperationType) throws ServiceException {
         long timestamp = System.currentTimeMillis();
 
         List<Integer> memberIdList = CollectionUtils.arrayToList(memberIds);
@@ -1449,7 +1450,7 @@ public class GroupManager extends BaseManager {
      * @param encodedMemberIds
      * @throws ServiceException
      */
-    public void batchSetManager(Integer currentUserId, Integer groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
+    public void batchSetManager(Integer currentUserId, String groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
         long timestamp = System.currentTimeMillis();
 
         setGroupMemberRole(groupId, memberIds, GroupRole.MANAGER, currentUserId, GroupOperationType.SET_MANAGER);
@@ -1468,7 +1469,7 @@ public class GroupManager extends BaseManager {
         }
         //如果开启了全员禁言，把新增加的管理员加入白名单
         try {
-            Result result = rongCloudClient.addGroupWhitelist(N3d.encode(groupId), encodedMemberIds);
+            Result result = rongCloudClient.addGroupWhitelist(groupId, encodedMemberIds);
             if (Constants.CODE_OK.equals(result.getCode())) {
                 return;
             } else {
@@ -1501,7 +1502,7 @@ public class GroupManager extends BaseManager {
      * @param encodedUserId
      * @throws ServiceException
      */
-    public void transfer(Integer currentUserId, Integer groupId, Integer userId, String encodedUserId) throws ServiceException {
+    public void transfer(Integer currentUserId, String groupId, Integer userId, String encodedUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         if (userId.equals(currentUserId)) {
@@ -1549,11 +1550,11 @@ public class GroupManager extends BaseManager {
             //如果全员禁言状态 是，将新群主加入群禁言 白名单，将当前用户(老群主)移除白名单
             try {
                 //将新群主加入白名单
-                Result result = rongCloudClient.addGroupWhitelist(N3d.encode(groupId), new String[]{N3d.encode(userId)});
+                Result result = rongCloudClient.addGroupWhitelist(groupId, new String[]{N3d.encode(userId)});
                 if (Constants.CODE_OK.equals(result.getCode())) {
                     //将老群主移除白名单
                     try {
-                        Result result2 = rongCloudClient.removeGroupWhiteList(N3d.encode(groupId), new String[]{N3d.encode(currentUserId)});
+                        Result result2 = rongCloudClient.removeGroupWhiteList(groupId, new String[]{N3d.encode(currentUserId)});
                         if (Constants.CODE_OK.equals(result2.getCode())) {
                             //根据groupId, currentUserId删除GroupReceiver
                             groupReceiversService.deleteGroupReverive(groupId, currentUserId);
@@ -1593,7 +1594,7 @@ public class GroupManager extends BaseManager {
      * @param userId
      * @param timestamp
      */
-    public void transferGroupCreator0(Integer currentUserId, Integer groupId, Integer userId, long timestamp) {
+    public void transferGroupCreator0(Integer currentUserId, String groupId, Integer userId, long timestamp) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -1638,7 +1639,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param encodedGroupId
      */
-    public void dismiss(Integer currentUserId, Integer groupId, String encodedGroupId) throws ServiceException {
+    public void dismiss(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1715,7 +1716,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    public void dismiss0(Integer currentUserId, Integer groupId, long timestamp) throws ServiceException {
+    public void dismiss0(Integer currentUserId, String groupId, long timestamp) throws ServiceException {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 
             @Override
@@ -1780,7 +1781,7 @@ public class GroupManager extends BaseManager {
      * @param encodedGroupId
      * @throws ServiceException
      */
-    public String quitGroup(Integer currentUserId, Integer groupId, String encodedGroupId) throws ServiceException {
+    public String quitGroup(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Users currentUser = usersService.getByPrimaryKey(currentUserId);
@@ -1854,7 +1855,7 @@ public class GroupManager extends BaseManager {
         return resultMessage;
     }
 
-    private String quitGroup0(Integer currentUserId, Integer groupId, long timestamp, Groups groups, Integer newCreatorId) {
+    private String quitGroup0(Integer currentUserId, String groupId, long timestamp, Groups groups, Integer newCreatorId) {
         return transactionTemplate.execute(new TransactionCallback<String>() {
             @Override
             public String doInTransaction(TransactionStatus transactionStatus) {
@@ -1928,7 +1929,7 @@ public class GroupManager extends BaseManager {
      * @param memberIds
      * @param encodeMemberIds
      */
-    public void kickMember(Integer currentUserId, Integer groupId, String encodeGroupId, Integer[] memberIds, String[] encodeMemberIds) throws ServiceException {
+    public void kickMember(Integer currentUserId, String groupId, String encodeGroupId, Integer[] memberIds, String[] encodeMemberIds) throws ServiceException {
         log.info("kickMember groupId:" + groupId + " memberIds.len:" + memberIds.length);
         long timestamp = System.currentTimeMillis();
         if (ArrayUtils.contains(memberIds, currentUserId)) {
@@ -2048,7 +2049,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    private void kickMember0(Integer groupId, Integer[] memberIds, long timestamp, Groups groups) {
+    private void kickMember0(String groupId, Integer[] memberIds, long timestamp, Groups groups) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -2075,7 +2076,7 @@ public class GroupManager extends BaseManager {
      * @param currentUserId
      * @param groupId
      */
-    public void deletefav(Integer currentUserId, Integer groupId) {
+    public void deletefav(Integer currentUserId, String groupId) {
         groupFavsService.deleteByGroupIdAndUserId(groupId, ImmutableList.of(currentUserId));
     }
 
@@ -2088,7 +2089,7 @@ public class GroupManager extends BaseManager {
      * @param portraitUri
      * @return
      */
-    public GroupAddStatusDTO copyGroup(Integer currentUserId, Integer groupId, String groupName, String portraitUri) throws ServiceException {
+    public GroupAddStatusDTO copyGroup(Integer currentUserId, String groupId, String groupName, String portraitUri) throws ServiceException {
 
         List<UserStatusDTO> userStatusDTOList = new ArrayList<>();
 
@@ -2215,7 +2216,7 @@ public class GroupManager extends BaseManager {
 
         try {
             //调用融云接口创建群组
-            Result result = rongCloudClient.createGroup(encode(newGroups.getId()), encodeMemberIds, groupName);
+            Result result = rongCloudClient.createGroup(newGroups.getId(), encodeMemberIds, groupName);
             if (Constants.CODE_OK.equals(result.getCode())) {
                 try {
                     //如果成功则调用融云接口发送群组通知
@@ -2264,7 +2265,7 @@ public class GroupManager extends BaseManager {
 
         //构建返回结果
         GroupAddStatusDTO groupAddStatusDTO = new GroupAddStatusDTO();
-        groupAddStatusDTO.setId(N3d.encode(newGroups.getId()));
+        groupAddStatusDTO.setId(newGroups.getId());
         groupAddStatusDTO.setUserStatus(userStatusDTOList);
         return groupAddStatusDTO;
     }
@@ -2277,7 +2278,7 @@ public class GroupManager extends BaseManager {
      * @param receiverId
      * @param status        是否同意 0 忽略、 1 同意
      */
-    public void agree(Integer currentUserId, Integer groupId, Integer receiverId, String status) throws ServiceException {
+    public void agree(Integer currentUserId, String groupId, Integer receiverId, String status) throws ServiceException {
         //是否为 被邀请者同意或忽略
         boolean isReceiverOpt = currentUserId.equals(receiverId);
         //是否同意
@@ -2431,7 +2432,7 @@ public class GroupManager extends BaseManager {
                 if (!CollectionUtils.isEmpty(groupMembersList)) {
                     for (GroupMembers groupMembers : groupMembersList) {
                         //调用融云清理接口
-                        rongCloudClient.clearHistoryMessage(conversationType, N3d.encode(groupMembers.getMemberId()), N3d.encode(groups.getId()), String.valueOf(clearTimestamp));
+                        rongCloudClient.clearHistoryMessage(conversationType, N3d.encode(groupMembers.getMemberId()), groups.getId(), String.valueOf(clearTimestamp));
                     }
                     //发送群组通知消息
                     sendCustomerClearGroupMessage(groups.getCreatorId(), groups.getId(), GroupOperationType.CLEARG_GROUP_MSG.getType(), clearTimestamp);

@@ -28,7 +28,7 @@ public class GroupReceivers implements Serializable {
     private Integer userId;
 
     @Column(name = "groupId")
-    private Integer groupId;
+    private String groupId;
 
     @Column(name = "groupName")
     private String groupName;
@@ -101,17 +101,11 @@ public class GroupReceivers implements Serializable {
         this.userId = userId;
     }
 
-    /**
-     * @return groupId
-     */
-    public Integer getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    /**
-     * @param groupId
-     */
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

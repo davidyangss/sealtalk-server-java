@@ -52,7 +52,7 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
      * @param creatorId
      * @throws ServiceException
      */
-    public void batchSaveOrUpdate(Integer groupId, List<Integer> memberIdList, long timestamp, Integer creatorId) {
+    public void batchSaveOrUpdate(String groupId, List<Integer> memberIdList, long timestamp, Integer creatorId) {
         Example example = new Example(GroupMembers.class);
         example.createCriteria().andEqualTo("groupId", groupId);
 
@@ -128,7 +128,7 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
      * @param memberId
      * @return
      */
-    public GroupMembers getGroupMember(Integer groupId, Integer memberId) {
+    public GroupMembers getGroupMember(String groupId, Integer memberId) {
 
         Example example = new Example(GroupMembers.class);
 
@@ -139,7 +139,7 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
 
 
 
-    public void updateByGroupIdAndMemberId(Integer groupId,Integer memberId,GroupMembers groupMembers){
+    public void updateByGroupIdAndMemberId(String groupId, Integer memberId,GroupMembers groupMembers){
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(memberId,"memberId is null");
 
@@ -150,7 +150,7 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
         this.updateByExampleSelective(groupMembers,example);
     }
 
-    public void updateByGroupIdAndMemberIds(Integer groupId,List<Integer> memberIdList,GroupMembers groupMembers){
+    public void updateByGroupIdAndMemberIds(String groupId,List<Integer> memberIdList,GroupMembers groupMembers){
         Assert.notNull(groupId,"groupId is null");
         Assert.notEmpty(memberIdList,"memberId is null");
 
@@ -161,7 +161,7 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
         this.updateByExampleSelective(groupMembers,example);
     }
 
-    public void updateByGroupId(Integer groupId,GroupMembers groupMembers){
+    public void updateByGroupId(String groupId,GroupMembers groupMembers){
         Assert.notNull(groupId,"groupId is null");
 
         Example example = new Example(GroupMembers.class);
@@ -170,17 +170,17 @@ public class GroupMembersService extends AbstractBaseService<GroupMembers, Integ
     }
 
 
-    public List<GroupMembers> queryGroupMembersWithUsersByGroupIdsAndVersion(List<Integer> groupIdList, Long version) {
+    public List<GroupMembers> queryGroupMembersWithUsersByGroupIdsAndVersion(List<String> groupIdList, Long version) {
         return mapper.selectGroupMembersWithUsersByGroupIdsAndVersion(groupIdList,version);
     }
 
 
-    public List<GroupMembers> queryGroupMembersWithUsersByGroupId(Integer groupId,Integer isDeleted) {
+    public List<GroupMembers> queryGroupMembersWithUsersByGroupId(String groupId,Integer isDeleted) {
         Assert.notNull(groupId,"groupId is null");
         return mapper.queryGroupMembersWithUsersByGroupId(groupId,isDeleted);
     }
 
-    public GroupMembers queryGroupMembersWithGroupByGroupIdAndMemberId(Integer groupId, Integer memberId) {
+    public GroupMembers queryGroupMembersWithGroupByGroupIdAndMemberId(String groupId, Integer memberId) {
 
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(memberId,"memberId is null");

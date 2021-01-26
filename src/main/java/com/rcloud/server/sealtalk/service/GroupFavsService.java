@@ -32,7 +32,7 @@ public class GroupFavsService extends AbstractBaseService<GroupFavs, Integer> {
         return mapper.queryGroupFavsWithGroupByUserId(userId, limit, offset);
     }
 
-    public void deleteByGroupIdAndUserId(Integer groupId, List<Integer> userIdList) {
+    public void deleteByGroupIdAndUserId(String groupId, List<Integer> userIdList) {
         Assert.notNull(groupId,"groupId is null");
 
         Example example = new Example(GroupFavs.class);

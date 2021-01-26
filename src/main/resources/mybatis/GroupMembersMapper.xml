@@ -6,7 +6,7 @@
           WARNING - @mbg.generated
         -->
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="groupId" jdbcType="INTEGER" property="groupId"/>
+        <result column="groupId" jdbcType="CHAR" property="groupId"/>
         <result column="memberId" jdbcType="INTEGER" property="memberId"/>
         <result column="displayName" jdbcType="VARCHAR" property="displayName"/>
         <result column="role" jdbcType="INTEGER" property="role"/>
@@ -25,7 +25,7 @@
 
     <resultMap id="resultMapWithGroups" type="com.rcloud.server.sealtalk.domain.GroupMembers">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="groupId" jdbcType="INTEGER" property="groupId"/>
+        <result column="groupId" jdbcType="CHAR" property="groupId"/>
         <result column="memberId" jdbcType="INTEGER" property="memberId"/>
         <result column="displayName" jdbcType="VARCHAR" property="displayName"/>
         <result column="role" jdbcType="INTEGER" property="role"/>
@@ -53,7 +53,7 @@
 
     <resultMap id="resultMapWithUsers" type="com.rcloud.server.sealtalk.domain.GroupMembers">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="groupId" jdbcType="INTEGER" property="groupId"/>
+        <result column="groupId" jdbcType="CHAR" property="groupId"/>
         <result column="memberId" jdbcType="INTEGER" property="memberId"/>
         <result column="displayName" jdbcType="VARCHAR" property="displayName"/>
         <result column="role" jdbcType="INTEGER" property="role"/>
@@ -163,7 +163,7 @@
         values
         <foreach collection ="groupMemberList" item="gm" index= "index" separator =",">
         (
-            #{gm.groupId,jdbcType=INTEGER},
+            #{gm.groupId,jdbcType=CHAR},
             #{gm.memberId,jdbcType=INTEGER},
             #{gm.role,jdbcType=INTEGER},
             #{gm.timestamp,jdbcType=BIGINT},

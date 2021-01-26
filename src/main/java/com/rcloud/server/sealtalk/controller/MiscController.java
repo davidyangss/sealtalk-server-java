@@ -182,7 +182,7 @@ public class MiscController extends BaseController {
             }
             List<Groups> groupsList = groupManager.getGroupList(groupIds);
 
-            Map<Integer, Groups> groupsMap = new HashMap<>();
+            Map<String, Groups> groupsMap = new HashMap<>();
             if (groupsList != null) {
                 for (Groups groups : groupsList) {
                     groupsMap.put(groups.getId(), groups);

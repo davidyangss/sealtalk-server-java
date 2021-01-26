@@ -33,8 +33,8 @@ public class Groups implements Serializable {
 
 
     @Id
-    @GeneratedValue(generator = "JDBC")
-    private Integer id;
+//    @GeneratedValue(generator = "JDBC")
+    private String id;
 
     private String name;
 
@@ -97,11 +97,11 @@ public class Groups implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class GroupSyncsService extends AbstractBaseService<GroupSyncs, Integer> {
+public class GroupSyncsService extends AbstractBaseService<GroupSyncs, String> {
 
     @Resource
     private GroupSyncsMapper mapper;
@@ -32,7 +32,7 @@ public class GroupSyncsService extends AbstractBaseService<GroupSyncs, Integer> 
      * @param syncInfo
      * @param syncMember
      */
-    public void saveOrUpdate(Integer groupId, Integer syncInfo, Integer syncMember) {
+    public void saveOrUpdate(String groupId, Integer syncInfo, Integer syncMember) {
         Assert.notNull(groupId,"groupId is null");
 
         GroupSyncs groupSyncs = this.getByPrimaryKey(groupId);

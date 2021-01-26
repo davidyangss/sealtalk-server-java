@@ -86,7 +86,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        List<UserStatusDTO> userStatusDTOList = groupManager.addMember(currentUserId, N3d.decode(groupId), MiscUtils.decodeIds(memberIds));
+        List<UserStatusDTO> userStatusDTOList = groupManager.addMember(currentUserId, groupId, MiscUtils.decodeIds(memberIds));
 
         return APIResultWrap.ok(userStatusDTOList);
     }
@@ -100,7 +100,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.joinGroup(currentUserId, N3d.decode(groupId), groupId);
+        groupManager.joinGroup(currentUserId, groupId, groupId);
 
         return APIResultWrap.ok();
     }
@@ -115,7 +115,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(memberIds);
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.kickMember(currentUserId, N3d.decode(groupId), groupId, MiscUtils.decodeIds(memberIds), memberIds);
+        groupManager.kickMember(currentUserId, groupId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
 
         return APIResultWrap.ok();
     }
@@ -129,7 +129,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        String resultMessage = groupManager.quitGroup(currentUserId, N3d.decode(groupId), groupId);
+        String resultMessage = groupManager.quitGroup(currentUserId, groupId, groupId);
         return APIResultWrap.ok(null,resultMessage);
     }
 
@@ -144,7 +144,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.dismiss(currentUserId, N3d.decode(groupId), groupId);
+        groupManager.dismiss(currentUserId, groupId, groupId);
         return APIResultWrap.ok();
     }
 
@@ -160,7 +160,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.transfer(currentUserId, N3d.decode(groupId), N3d.decode(userId), userId);
+        groupManager.transfer(currentUserId, groupId, N3d.decode(userId), userId);
         return APIResultWrap.ok();
     }
 
@@ -175,7 +175,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.batchSetManager(currentUserId, N3d.decode(groupId), MiscUtils.decodeIds(memberIds), memberIds);
+        groupManager.batchSetManager(currentUserId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
         return APIResultWrap.ok();
     }
 
@@ -191,7 +191,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.batchRemoveManager(currentUserId, N3d.decode(groupId), MiscUtils.decodeIds(memberIds), memberIds);
+        groupManager.batchRemoveManager(currentUserId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
 
         return APIResultWrap.ok();
     }
@@ -207,7 +207,7 @@ public class GroupController extends BaseController {
         ValidateUtils.checkGroupName(name);
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.rename(currentUserId, N3d.decode(groupId), name, groupId);
+        groupManager.rename(currentUserId, groupId, name, groupId);
 
         return APIResultWrap.ok();
     }
@@ -223,7 +223,7 @@ public class GroupController extends BaseController {
         }
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.fav(currentUserId, N3d.decode(groupId));
+        groupManager.fav(currentUserId, groupId);
         return APIResultWrap.ok();
     }
 
@@ -235,7 +235,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.deletefav(currentUserId, N3d.decode(groupId));
+        groupManager.deletefav(currentUserId, groupId);
         return APIResultWrap.ok();
     }
 
@@ -258,7 +258,7 @@ public class GroupController extends BaseController {
         ValidateUtils.checkGroupBulletion(bulletin);
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.setBulletin(currentUserId, N3d.decode(groupId), bulletin);
+        groupManager.setBulletin(currentUserId, groupId, bulletin);
 
         return APIResultWrap.ok();
     }
@@ -271,14 +271,14 @@ public class GroupController extends BaseController {
 
         ValidateUtils.notEmpty(groupId);
 
-        GroupBulletins groupBulletins = groupManager.getBulletin(N3d.decode(groupId));
+        GroupBulletins groupBulletins = groupManager.getBulletin(groupId);
 
         GroupBulletinsDTO groupBulletinsDTO = new GroupBulletinsDTO();
         if (groupBulletins == null) {
             throw new ServiceException(ErrorCode.NO_GROUP_BULLETIN);
         } else {
             // 返回给前端的结构id属性需要N3d编码
-            groupBulletinsDTO.setGroupId(N3d.encode(groupBulletins.getGroupId()));
+            groupBulletinsDTO.setGroupId(groupBulletins.getGroupId());
             groupBulletinsDTO.setContent(groupBulletins.getContent());
             groupBulletinsDTO.setId(N3d.encode(groupBulletins.getId()));
             groupBulletinsDTO.setTimestamp(groupBulletins.getTimestamp());
@@ -302,7 +302,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.setGroupPortraitUri(currentUserId, N3d.decode(groupId), portraitUri);
+        groupManager.setGroupPortraitUri(currentUserId, groupId, portraitUri);
         return APIResultWrap.ok("群头像设置成功");
     }
 
@@ -321,7 +321,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.setDisPlayName(currentUserId, N3d.decode(groupId), displayName);
+        groupManager.setDisPlayName(currentUserId, groupId, displayName);
         return APIResultWrap.ok();
     }
 
@@ -333,23 +333,21 @@ public class GroupController extends BaseController {
             @PathVariable("id") String groupId) throws ServiceException {
         ValidateUtils.notEmpty(groupId);
 
-        Groups group = groupManager.getGroupInfo(N3d.decode(groupId));
+        Groups group = groupManager.getGroupInfo(groupId);
 
         GroupDTO groupDTO = new GroupDTO();
-        if (groupDTO != null) {
-            groupDTO.setId(N3d.encode(group.getId()));
-            groupDTO.setName(group.getName());
-            groupDTO.setPortraitUri(group.getPortraitUri());
-            groupDTO.setCreatorId(N3d.encode(group.getCreatorId()));
-            groupDTO.setMemberCount(group.getMemberCount());
-            groupDTO.setMaxMemberCount(group.getMaxMemberCount());
-            groupDTO.setCertiStatus(group.getCertiStatus());
-            groupDTO.setBulletin(group.getBulletin());
-            groupDTO.setIsMute(group.getIsMute());
-            groupDTO.setMemberProtection(group.getMemberProtection());
-            groupDTO.setDeletedAt(group.getDeletedAt());
+        groupDTO.setId(group.getId());
+        groupDTO.setName(group.getName());
+        groupDTO.setPortraitUri(group.getPortraitUri());
+        groupDTO.setCreatorId(N3d.encode(group.getCreatorId()));
+        groupDTO.setMemberCount(group.getMemberCount());
+        groupDTO.setMaxMemberCount(group.getMaxMemberCount());
+        groupDTO.setCertiStatus(group.getCertiStatus());
+        groupDTO.setBulletin(group.getBulletin());
+        groupDTO.setIsMute(group.getIsMute());
+        groupDTO.setMemberProtection(group.getMemberProtection());
+        groupDTO.setDeletedAt(group.getDeletedAt());
 
-        }
         return APIResultWrap.ok(groupDTO);
     }
 
@@ -363,7 +361,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        List<GroupMembers> groupMembersList = groupManager.getGroupMembers(currentUserId, N3d.decode(groupId));
+        List<GroupMembers> groupMembersList = groupManager.getGroupMembers(currentUserId, groupId);
 
         List<MemberDTO> memberDTOList = new ArrayList<>();
 
@@ -411,7 +409,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.setCertification(currentUserId, N3d.decode(groupId), certiStatus);
+        groupManager.setCertification(currentUserId, groupId, certiStatus);
         return APIResultWrap.ok("");
     }
 
@@ -437,7 +435,7 @@ public class GroupController extends BaseController {
                 Map<String, Object> receiver = Maps.newHashMap();
                 Map<String, Object> requester = Maps.newHashMap();
                 if (groupReceivers.getGroup() != null) {
-                    group.put("id", N3d.encode(groupReceivers.getGroup().getId()));
+                    group.put("id", groupReceivers.getGroup().getId());
                     group.put("name", groupReceivers.getGroup().getName());
 
                 }
@@ -487,7 +485,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.setMuteAll(currentUserId, N3d.decode(groupId), muteStatus, MiscUtils.decodeIds(userId));
+        groupManager.setMuteAll(currentUserId, groupId, muteStatus, MiscUtils.decodeIds(userId));
 
         return APIResultWrap.ok("全员禁言成功");
     }
@@ -505,7 +503,7 @@ public class GroupController extends BaseController {
 
         Integer currentUserId = getCurrentUserId();
 
-        groupManager.setRegularClear(currentUserId, N3d.decode(groupId), clearStatus);
+        groupManager.setRegularClear(currentUserId, groupId, clearStatus);
 
         return APIResultWrap.ok();
     }
@@ -517,7 +515,7 @@ public class GroupController extends BaseController {
         String groupId = groupParam.getGroupId();
         ValidateUtils.notEmpty(groupId);
 
-        Groups groups = groupManager.getGroup(N3d.decode(groupId));
+        Groups groups = groupManager.getGroup(groupId);
 
         if(groups!=null){
             Integer clearStatus = groups.getClearStatus();
@@ -547,7 +545,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(memberId);
 
 
-        groupManager.setMemberInfo(N3d.decode(groupId), N3d.decode(memberId), groupNickname, region, phone, WeChat, Alipay, memberDesc);
+        groupManager.setMemberInfo(groupId, N3d.decode(memberId), groupNickname, region, phone, WeChat, Alipay, memberDesc);
         return APIResultWrap.ok("设置成功");
     }
 
@@ -562,7 +560,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.notEmpty(memberId);
 
-        GroupMembers groupMembers = groupManager.getMemberInfo(N3d.decode(groupId), N3d.decode(memberId));
+        GroupMembers groupMembers = groupManager.getMemberInfo(groupId, N3d.decode(memberId));
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -626,7 +624,7 @@ public class GroupController extends BaseController {
         ValidateUtils.valueOf(memberProtection, ImmutableList.of(0, 1));
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.setMemberProtection(currentUserId, N3d.decode(groupId), memberProtection);
+        groupManager.setMemberProtection(currentUserId, groupId, memberProtection);
         return APIResultWrap.ok();
 
     }
@@ -645,7 +643,7 @@ public class GroupController extends BaseController {
         portraitUri = MiscUtils.xss(portraitUri, ValidateUtils.PORTRAIT_URI_MAX_LENGTH);
 
         Integer currentUserId = getCurrentUserId();
-        GroupAddStatusDTO groupAddStatusDTO = groupManager.copyGroup(currentUserId, N3d.decode(groupId), name, portraitUri);
+        GroupAddStatusDTO groupAddStatusDTO = groupManager.copyGroup(currentUserId, groupId, name, portraitUri);
         return APIResultWrap.ok(groupAddStatusDTO);
 
     }
@@ -663,7 +661,7 @@ public class GroupController extends BaseController {
         ValidateUtils.valueOf(status, ImmutableList.of("0", "1"));
 
         Integer currentUserId = getCurrentUserId();
-        groupManager.agree(currentUserId, N3d.decode(groupId), N3d.decode(receiverId), status);
+        groupManager.agree(currentUserId, groupId, N3d.decode(receiverId), status);
         return APIResultWrap.ok();
 
     }

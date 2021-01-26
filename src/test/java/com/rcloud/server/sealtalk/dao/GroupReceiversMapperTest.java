@@ -25,7 +25,7 @@ public class GroupReceiversMapperTest {
 
     @Test
     public void name() {
-        Integer groupId = 1;
+        String groupId = "1";
         Integer requesterId = null;
         Integer groupReceiveType=2;
         List<Integer> operatorList = ImmutableList.of(100,101,102);

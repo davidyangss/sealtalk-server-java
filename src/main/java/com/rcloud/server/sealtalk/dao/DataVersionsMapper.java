@@ -8,7 +8,7 @@ public interface DataVersionsMapper extends Mapper<DataVersions> {
 
     void updateAllFriendshipVersion(@Param("userId") int userId,@Param("timestamp") long timestamp);
 
-    void updateGroupMemberVersion(@Param("groupId") Integer groupId, @Param("timestamp") long timestamp);
+    void updateGroupMemberVersion(@Param("groupId") String groupId, @Param("timestamp") long timestamp);
 
-    void updateGroupVersion(@Param("groupId") Integer groupId, @Param("timestamp") long timestamp);
+    void updateGroupVersion(@Param("groupId") String groupId, @Param("timestamp") long timestamp);
 }

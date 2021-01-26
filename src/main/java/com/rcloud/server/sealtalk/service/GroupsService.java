@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Service
-public class GroupsService extends AbstractBaseService<Groups, Integer> {
+public class GroupsService extends AbstractBaseService<Groups, String> {
 
     @Resource
     private GroupsMapper mapper;
@@ -33,7 +33,7 @@ public class GroupsService extends AbstractBaseService<Groups, Integer> {
      * @param memberCount
      * @param timestamp
      */
-    public void updateMemberCount(Integer groupId, Integer memberCount, Long timestamp) {
+    public void updateMemberCount(String groupId, Integer memberCount, Long timestamp) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(memberCount,"memberCount is null");
         Assert.notNull(timestamp,"timestamp is null");
@@ -51,7 +51,7 @@ public class GroupsService extends AbstractBaseService<Groups, Integer> {
      * @param timestamp
      * @param creatorId
      */
-    public void updateMemberCountAndCreatorId(Integer groupId, Integer memberCount, Long timestamp, Integer creatorId) {
+    public void updateMemberCountAndCreatorId(String groupId, Integer memberCount, Long timestamp, Integer creatorId) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(memberCount,"memberCount is null");
         Assert.notNull(timestamp,"timestamp is null");

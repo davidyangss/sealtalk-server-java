@@ -14,7 +14,7 @@ public class GroupSyncs implements Serializable {
 
     @Id
     @Column(name = "groupId")
-    private Integer groupId;
+    private String groupId;
 
     @Column(name = "syncInfo")
     private Integer syncInfo;
@@ -26,17 +26,11 @@ public class GroupSyncs implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @return groupId
-     */
-    public Integer getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    /**
-     * @param groupId
-     */
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

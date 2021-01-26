@@ -16,7 +16,7 @@ public class GroupFavs implements Serializable {
     private Integer userId;
 
     @Column(name = "groupId")
-    private Integer groupId;
+    private String groupId;
 
     @Column(name = "createdAt")
     private Date createdAt;
@@ -57,17 +57,11 @@ public class GroupFavs implements Serializable {
         this.userId = userId;
     }
 
-    /**
-     * @return groupId
-     */
-    public Integer getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    /**
-     * @param groupId
-     */
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

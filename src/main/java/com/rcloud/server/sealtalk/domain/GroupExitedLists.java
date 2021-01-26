@@ -17,7 +17,7 @@ public class GroupExitedLists implements Serializable {
     private Integer id;
 
     @Column(name = "groupId")
-    private Integer groupId;
+    private String groupId;
 
     @Column(name = "quitUserId")
     private Integer quitUserId;
@@ -62,17 +62,11 @@ public class GroupExitedLists implements Serializable {
         this.id = id;
     }
 
-    /**
-     * @return groupId
-     */
-    public Integer getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    /**
-     * @param groupId
-     */
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

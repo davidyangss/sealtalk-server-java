@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="groupId" jdbcType="INTEGER" property="groupId" />
+    <result column="groupId" jdbcType="CHAR" property="groupId" />
     <result column="timestamp" jdbcType="BIGINT" property="timestamp" />
     <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updatedAt" jdbcType="TIMESTAMP" property="updatedAt" />

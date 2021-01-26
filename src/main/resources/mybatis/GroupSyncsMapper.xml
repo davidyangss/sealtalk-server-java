@@ -5,7 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="groupId" jdbcType="INTEGER" property="groupId" />
+    <id column="groupId" jdbcType="CHAR" property="groupId" />
     <result column="syncInfo" jdbcType="INTEGER" property="syncInfo" />
     <result column="syncMember" jdbcType="INTEGER" property="syncMember" />
     <result column="dismiss" jdbcType="INTEGER" property="dismiss" />

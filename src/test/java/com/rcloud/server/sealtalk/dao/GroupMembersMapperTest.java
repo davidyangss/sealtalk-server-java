@@ -35,7 +35,7 @@ public class GroupMembersMapperTest {
 
         long beginTime = System.currentTimeMillis();
 
-        Integer groupId = 90001;
+        String groupId = "90001";
         Integer memberIdFirst = 10000;
         Integer creatorId = memberIdFirst;
 
@@ -73,7 +73,7 @@ public class GroupMembersMapperTest {
     public void insertBatch2() throws ServiceException {
         long beginTime = System.currentTimeMillis();
 
-        Integer groupId = 90001;
+        String groupId = "90001";
         Integer memberIdFirst = 10000;
         Integer creatorId = memberIdFirst;
 

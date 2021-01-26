@@ -576,7 +576,7 @@ public class UserController extends BaseController {
         if (!CollectionUtils.isEmpty(groupsList)) {
             for (Groups groups : groupsList) {
                 FavGroupInfoDTO favGroupInfoDTO = new FavGroupInfoDTO();
-                favGroupInfoDTO.setId(N3d.encode(groups.getId()));
+                favGroupInfoDTO.setId(groups.getId());
                 favGroupInfoDTO.setName(groups.getName());
                 favGroupInfoDTO.setPortraitUri(groups.getPortraitUri());
                 favGroupInfoDTO.setMemberCount(groups.getMemberCount());

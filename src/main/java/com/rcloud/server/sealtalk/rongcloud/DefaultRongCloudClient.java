@@ -353,7 +353,7 @@ public class DefaultRongCloudClient implements RongCloudClient {
 
                 for (int i = 0; i < groupsList.size(); i++) {
                     GroupModel groupModel = new GroupModel();
-                    groupModel.setId(N3d.encode(groupsList.get(i).getId()));
+                    groupModel.setId(groupsList.get(i).getId());
                     groupModel.setName(groupsList.get(i).getName());
                     groupModelsArray[i] = groupModel;
                 }
