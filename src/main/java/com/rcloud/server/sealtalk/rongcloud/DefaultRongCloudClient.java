@@ -4,7 +4,6 @@ import com.rcloud.server.sealtalk.configuration.SealtalkConfig;
 import com.rcloud.server.sealtalk.domain.Groups;
 import com.rcloud.server.sealtalk.exception.ServiceException;
 import com.rcloud.server.sealtalk.rongcloud.message.*;
-import com.rcloud.server.sealtalk.util.N3d;
 import io.rong.RongCloud;
 import io.rong.messages.GroupNotificationMessage;
 import io.rong.messages.TxtMessage;
