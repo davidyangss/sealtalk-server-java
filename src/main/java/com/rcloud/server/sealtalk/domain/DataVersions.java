@@ -10,7 +10,7 @@ public class DataVersions implements Serializable {
 
     @Id
     @Column(name = "userId")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "userVersion")
     private Long userVersion;
@@ -32,14 +32,14 @@ public class DataVersions implements Serializable {
     /**
      * @return userId
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     /**
      * @param userId
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

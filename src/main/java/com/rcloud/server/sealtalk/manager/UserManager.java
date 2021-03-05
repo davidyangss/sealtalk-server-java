@@ -269,7 +269,7 @@ public class UserManager extends BaseManager {
         return verificationCodes.getToken();
     }
 
-    public Integer register(String nickname, String password, String verificationToken) throws ServiceException {
+    public Long register(String nickname, String password, String verificationToken) throws ServiceException {
 
         VerificationCodes verificationCodes = verificationCodesService.getByToken(verificationToken);
 
@@ -313,7 +313,7 @@ public class UserManager extends BaseManager {
 
                 //插入user表
                 Users u = new Users();
-                u.setId(Integer.parseInt(phone.substring(3)));
+                u.setId(Long.parseLong(phone));
                 u.setNickname(nickname);
                 u.setRegion(region);
                 u.setPhone(phone);
@@ -367,7 +367,7 @@ public class UserManager extends BaseManager {
      * @return Pair<L, R> L=用户ID，R=融云token
      * @throws ServiceException
      */
-    public Pair<Integer, String> login(String region, String phone, String password) throws ServiceException {
+    public Pair<Long, String> login(String region, String phone, String password) throws ServiceException {
 
         Users param = new Users();
         param.setRegion(region);
@@ -495,7 +495,7 @@ public class UserManager extends BaseManager {
      * @param currentUserId
      * @throws ServiceException
      */
-    public void changePassword(String newPassword, String oldPassword, Integer currentUserId) throws ServiceException {
+    public void changePassword(String newPassword, String oldPassword, Long currentUserId) throws ServiceException {
 
         Users u = usersService.getByPrimaryKey(currentUserId);
 
@@ -536,7 +536,7 @@ public class UserManager extends BaseManager {
      * @param currentUserId
      * @throws ServiceException
      */
-    public void setNickName(String nickname, Integer currentUserId) throws ServiceException {
+    public void setNickName(String nickname, Long currentUserId) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         //修改昵称
         Users users = new Users();
@@ -571,7 +571,7 @@ public class UserManager extends BaseManager {
      * @param currentUserId
      * @throws ServiceException
      */
-    public void setPortraitUri(String portraitUri, Integer currentUserId) throws ServiceException {
+    public void setPortraitUri(String portraitUri, Long currentUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Users u = usersService.getByPrimaryKey(currentUserId);
@@ -606,7 +606,7 @@ public class UserManager extends BaseManager {
      *
      * @param currentUserId
      */
-    private void clearCacheAndUpdateVersion(Integer currentUserId, long timestamp) {
+    private void clearCacheAndUpdateVersion(Long currentUserId, long timestamp) {
         //修改DataVersion表中 UserVersion
         DataVersions dataVersions = new DataVersions();
         dataVersions.setUserId(currentUserId);
@@ -652,7 +652,7 @@ public class UserManager extends BaseManager {
      * 3、根据userId更新本地数据users表中rongCloudToken
      * 4、把userid，token返回给前端
      */
-    public Pair<Integer, String> getToken(Integer currentUserId) throws ServiceException {
+    public Pair<Long, String> getToken(Long currentUserId) throws ServiceException {
 
         Users user = usersService.getByPrimaryKey(currentUserId);
 
@@ -684,7 +684,7 @@ public class UserManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public List<BlackLists> getBlackList(Integer currentUserId) throws ServiceException {
+    public List<BlackLists> getBlackList(Long currentUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         //从缓存中获取blacklist，存在直接返回
@@ -732,7 +732,7 @@ public class UserManager extends BaseManager {
             for (Long serverId : serverBlackListIds) {
                 //需要每条数据都更新数据库吗？TODO
                 if (!dbBlacklistUserIds.contains(serverId)) {
-                    blackListsService.saveOrUpdate(currentUserId, serverId.intValue(), BlackLists.STATUS_VALID, timestamp);
+                    blackListsService.saveOrUpdate(currentUserId, serverId.longValue(), BlackLists.STATUS_VALID, timestamp);
                     log.info("Sync: fix user blacklist, add {} -> {} from db.", currentUserId, serverId);
                     //刷新黑名单版本
                     dataVersionsService.updateBlacklistVersion(currentUserId, timestamp);
@@ -745,7 +745,7 @@ public class UserManager extends BaseManager {
             for (Long userId : dbBlacklistUserIds) {
                 if (!serverBlackListIds.contains(userId)) {
 
-                    blackListsService.updateStatus(currentUserId, userId.intValue(), BlackLists.STATUS_INVALID, timestamp);
+                    blackListsService.updateStatus(currentUserId, userId.longValue(), BlackLists.STATUS_INVALID, timestamp);
                     log.info("Sync: fix user blacklist, remove {} -> {} from db.", currentUserId, userId);
 
                     //刷新黑名单版本
@@ -774,7 +774,7 @@ public class UserManager extends BaseManager {
      * -》Cache.del("friendship_all_" + currentUserId);
      * -》Cache.del("friendship_all_" + friendId);
      */
-    public void addBlackList(Integer currentUserId, Integer friendId, String encodedFriendId) throws ServiceException {
+    public void addBlackList(Long currentUserId, Long friendId, String encodedFriendId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         //判断friendId 用户是否存在
@@ -826,7 +826,7 @@ public class UserManager extends BaseManager {
      * @param encodedFriendId
      * @throws ServiceException
      */
-    public void removeBlackList(Integer currentUserId, Integer friendId, String encodedFriendId) throws ServiceException {
+    public void removeBlackList(Long currentUserId, Long friendId, String encodedFriendId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -864,7 +864,7 @@ public class UserManager extends BaseManager {
      * @param currentUserId
      * @return
      */
-    public List<Groups> getGroups(Integer currentUserId) throws ServiceException {
+    public List<Groups> getGroups(Long currentUserId) throws ServiceException {
 
         List<Groups> groupsList = new ArrayList<>();
 
@@ -892,7 +892,7 @@ public class UserManager extends BaseManager {
      * @param userId
      * @return
      */
-    public Users getUser(Integer userId) {
+    public Users getUser(Long userId) {
         return usersService.getByPrimaryKey(userId);
     }
 
@@ -951,7 +951,7 @@ public class UserManager extends BaseManager {
      * @param stAccount
      * @throws ServiceException
      */
-    public void setStAccount(Integer currentUserId, String stAccount) throws ServiceException {
+    public void setStAccount(Long currentUserId, String stAccount) throws ServiceException {
         Users u = new Users();
         u.setStAccount(stAccount);
 
@@ -974,7 +974,7 @@ public class UserManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public Pair<Integer, List<Groups>> getFavGroups(Integer userId, Integer limit, Integer offset) throws ServiceException {
+    public Pair<Integer, List<Groups>> getFavGroups(Long userId, Integer limit, Integer offset) throws ServiceException {
         List<Groups> groupsList = new ArrayList<>();
         Integer count = groupFavsService.queryCountGroupFavs(userId);
         if (count != null && count > 0) {
@@ -1044,7 +1044,7 @@ public class UserManager extends BaseManager {
      * @param currentUserId
      * @param version
      */
-    public SyncInfoDTO getSyncInfo(Integer currentUserId, Long version) throws ServiceException {
+    public SyncInfoDTO getSyncInfo(Long currentUserId, Long version) throws ServiceException {
 
         SyncInfoDTO syncInfoDTO = new SyncInfoDTO();
 

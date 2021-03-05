@@ -17,7 +17,7 @@ import java.util.List;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class FriendshipsService extends AbstractBaseService<Friendships, Integer> {
+public class FriendshipsService extends AbstractBaseService<Friendships, Long> {
 
     @Resource
     private FriendshipsMapper mapper;
@@ -28,7 +28,7 @@ public class FriendshipsService extends AbstractBaseService<Friendships, Integer
     }
 
 
-    public void saveOrUpdate(Friendships friendship, Integer userId, Integer friendId) {
+    public void saveOrUpdate(Friendships friendship, Long userId, Long friendId) {
 
         Example example = new Example(Friendships.class);
         example.createCriteria().andEqualTo("userId", userId)
@@ -41,7 +41,7 @@ public class FriendshipsService extends AbstractBaseService<Friendships, Integer
         }
     }
 
-    public int updateAgreeStatus(Integer userId, Integer friendId, long timestamp, List<Integer> statusList) {
+    public int updateAgreeStatus(Long userId, Long friendId, long timestamp, List<Integer> statusList) {
 
         Example example = new Example(Friendships.class);
         Example.Criteria criteria = example.createCriteria();
@@ -56,11 +56,11 @@ public class FriendshipsService extends AbstractBaseService<Friendships, Integer
         return this.updateByExampleSelective(friendships, example);
     }
 
-    public List<Friendships> getFriendShipListWithUsers(Integer currentUserId) {
+    public List<Friendships> getFriendShipListWithUsers(Long currentUserId) {
         return mapper.getFriendShipListWithUsers(currentUserId);
     }
 
-    public Friendships getFriendShipWithUsers(Integer currentUserId, int friendId, int status) {
+    public Friendships getFriendShipWithUsers(Long currentUserId, Long friendId, int status) {
         return mapper.getFriendShipWithUsers(currentUserId,friendId,status);
     }
 
@@ -70,7 +70,7 @@ public class FriendshipsService extends AbstractBaseService<Friendships, Integer
      * @param currentUserId
      * @param friendId
      */
-    public void updateFriendShipBlacklistsStatus(Integer currentUserId, Integer friendId) {
+    public void updateFriendShipBlacklistsStatus(Long currentUserId, Long friendId) {
 
         //更新Friendship 表状态信息为 FRIENDSHIP_BLACK = 31
         Friendships friendships = new Friendships();
@@ -86,11 +86,11 @@ public class FriendshipsService extends AbstractBaseService<Friendships, Integer
         this.updateByExampleSelective(friendships, example);
     }
 
-    public List<Friendships> getFriendShipListWithUsers(Integer currentUserId, Long version) {
+    public List<Friendships> getFriendShipListWithUsers(Long currentUserId, Long version) {
         return mapper.selectFriendShipListWithUsersAndVersion(currentUserId,version);
     }
 
-    public Friendships getOneByUserIdAndFriendId(Integer currentUserId, Integer friendId) {
+    public Friendships getOneByUserIdAndFriendId(Long currentUserId, Long friendId) {
         Friendships f = new Friendships();
         f.setUserId(currentUserId);
         f.setFriendId(friendId);

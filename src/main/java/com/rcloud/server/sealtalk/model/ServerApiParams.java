@@ -13,7 +13,7 @@ public class ServerApiParams {
 
     private String traceId;
 
-    private Integer currentUserId;
+    private Long currentUserId;
 
     private RequestUriInfo requestUriInfo;
 }

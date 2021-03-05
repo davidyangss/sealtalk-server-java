@@ -17,7 +17,7 @@ public abstract class BaseController {
     @Resource
     protected SealtalkConfig sealtalkConfig;
 
-    protected Integer getCurrentUserId() {
+    protected Long getCurrentUserId() {
         ServerApiParams serverApiParams = ServerApiParamHolder.get();
         if (serverApiParams != null) {
             return serverApiParams.getCurrentUserId();

@@ -47,7 +47,7 @@ public class Groups implements Serializable {
     private Integer maxMemberCount;
 
     @Column(name = "creatorId")
-    private Integer creatorId;
+    private Long creatorId;
 
     @Column(name = "easemobGroupId")
     private String easemobGroupId;
@@ -136,11 +136,11 @@ public class Groups implements Serializable {
         this.maxMemberCount = maxMemberCount;
     }
 
-    public Integer getCreatorId() {
+    public Long getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Integer creatorId) {
+    public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
     }
 

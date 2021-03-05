@@ -36,8 +36,8 @@ public class GroupMembersMapperTest {
         long beginTime = System.currentTimeMillis();
 
         String groupId = "90001";
-        Integer memberIdFirst = 10000;
-        Integer creatorId = memberIdFirst;
+        Long memberIdFirst = 10000l;
+        Long creatorId = memberIdFirst;
 
 
         List<GroupMembers> groupMembersList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class GroupMembersMapperTest {
         for(int i=0;i<size;i++){
             GroupMembers groupMembers = new GroupMembers();
             groupMembers.setGroupId(groupId);
-            Integer memberId = memberIdFirst +i;
+            Long memberId = memberIdFirst +i;
             groupMembers.setMemberId(memberId);
             groupMembers.setRole(memberId.equals(creatorId) ? GroupRole.CREATOR.getCode() : GroupRole.MEMBER.getCode());
             groupMembers.setTimestamp(System.currentTimeMillis());
@@ -74,8 +74,8 @@ public class GroupMembersMapperTest {
         long beginTime = System.currentTimeMillis();
 
         String groupId = "90001";
-        Integer memberIdFirst = 10000;
-        Integer creatorId = memberIdFirst;
+        Long memberIdFirst = 10000l;
+        Long creatorId = memberIdFirst;
 
 
         List<GroupMembers> groupMembersList = new ArrayList<>();
@@ -83,7 +83,7 @@ public class GroupMembersMapperTest {
         for(int i=0;i<1000;i++){
             GroupMembers groupMembers = new GroupMembers();
             groupMembers.setGroupId(groupId);
-            Integer memberId = memberIdFirst +i;
+            Long memberId = memberIdFirst +i;
             groupMembers.setMemberId(memberId);
             groupMembers.setRole(memberId.equals(creatorId) ? GroupRole.CREATOR.getCode() : GroupRole.MEMBER.getCode());
             groupMembers.setTimestamp(System.currentTimeMillis());

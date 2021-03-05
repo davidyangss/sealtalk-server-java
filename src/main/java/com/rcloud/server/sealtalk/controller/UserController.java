@@ -201,7 +201,7 @@ public class UserController extends BaseController {
         checkRegisterParam(nickname, password, verification_token);
 
         nickname = MiscUtils.xss(nickname, ValidateUtils.NICKNAME_MAX_LENGTH);
-        Integer id = userManager.register(nickname, password, verification_token);
+        Long id = userManager.register(nickname, password, verification_token);
         //设置cookie
         setCookie(response, id);
         Map<String, Object> resultMap = new HashMap<>();
@@ -240,7 +240,7 @@ public class UserController extends BaseController {
 //        ValidateUtils.checkRegionName(MiscUtils.getRegionName(region));
         ValidateUtils.checkCompletePhone(phone);
 
-        Pair<Integer, String> pairResult = userManager.login(region, phone, password);
+        Pair<Long, String> pairResult = userManager.login(region, phone, password);
 
         //设置cookie  userId加密存入cookie
         //登录成功后的其他请求，当前登录用户useId获取从cookie中获取
@@ -290,7 +290,7 @@ public class UserController extends BaseController {
         ValidateUtils.checkPassword(newPassword);
         ValidateUtils.notEmpty(oldPassword);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.changePassword(newPassword, oldPassword, currentUserId);
         return APIResultWrap.ok();
     }
@@ -321,7 +321,7 @@ public class UserController extends BaseController {
         nickname = MiscUtils.xss(nickname, ValidateUtils.NICKNAME_MAX_LENGTH);
         ValidateUtils.checkNickName(nickname);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.setNickName(nickname, currentUserId);
         return APIResultWrap.ok();
     }
@@ -336,7 +336,7 @@ public class UserController extends BaseController {
         ValidateUtils.checkURLFormat(portraitUri);
         ValidateUtils.checkPortraitUri(portraitUri);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.setPortraitUri(portraitUri, currentUserId);
         return APIResultWrap.ok();
     }
@@ -346,8 +346,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/get_token", method = RequestMethod.GET)
     public APIResult<Object> getToken() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
-        Pair<Integer, String> pairResult = userManager.getToken(currentUserId);
+        Long currentUserId = getCurrentUserId();
+        Pair<Long, String> pairResult = userManager.getToken(currentUserId);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("id", pairResult.getLeft());
@@ -361,7 +361,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public APIResult<Object> blacklist() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         List<BlackLists> resultList = userManager.getBlackList(currentUserId);
 
@@ -397,7 +397,7 @@ public class UserController extends BaseController {
         String friendId = userParam.getFriendId();
         ValidateUtils.notEmpty(friendId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.addBlackList(currentUserId, N3d.decode(friendId), friendId);
         return APIResultWrap.ok();
     }
@@ -409,7 +409,7 @@ public class UserController extends BaseController {
         String friendId = userParam.getFriendId();
         ValidateUtils.notEmpty(friendId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.removeBlackList(currentUserId, N3d.decode(friendId), friendId);
         return APIResultWrap.ok();
     }
@@ -451,7 +451,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public APIResult<Object> getGroups() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         List<Groups> groupsList = userManager.getGroups(currentUserId);
 
         return APIResultWrap.ok(MiscUtils.encodeResults(groupsList, "id", "creatorId"));
@@ -464,7 +464,7 @@ public class UserController extends BaseController {
 
         ValidateUtils.checkTimeStamp(version);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         SyncInfoDTO syncInfoDTO = userManager.getSyncInfo(currentUserId, Long.valueOf(version));
         return APIResultWrap.ok(syncInfoDTO);
@@ -535,7 +535,7 @@ public class UserController extends BaseController {
     public APIResult<Object> getUserInfo(@ApiParam(name = "id", value = "用户ID", required = true, type = "Integer", example = "xxx")
                                          @PathVariable("id") String id) throws ServiceException {
 
-        Integer userId = N3d.decode(id);
+        Long userId  = N3d.decode(id);
         Users users = userManager.getUser(userId);
         if (users != null) {
             UserDTO userDTO = new UserDTO();
@@ -564,7 +564,7 @@ public class UserController extends BaseController {
             throw new ServiceException(ErrorCode.REQUEST_ERROR);
         }
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         Pair<Integer, List<Groups>> result = userManager.getFavGroups(currentUserId, limit, offset);
 
         Integer count = result.getLeft();
@@ -610,7 +610,7 @@ public class UserController extends BaseController {
 
         ValidateUtils.checkStAccount(stAccount);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         userManager.setStAccount(currentUserId, stAccount);
         return APIResultWrap.ok();
     }
@@ -622,7 +622,7 @@ public class UserController extends BaseController {
         String gender = userParam.getGender();
 
         ValidateUtils.checkGender(gender);
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         Users u = new Users();
         u.setId(currentUserId);
         u.setGender(gender);
@@ -641,7 +641,7 @@ public class UserController extends BaseController {
         Integer groupVerify = userParam.getGroupVerify();
 
         ValidateUtils.checkPrivacy(phoneVerify, stSearchVerify, friVerify, groupVerify);
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         Users users = userManager.getUser(currentUserId);
 
@@ -659,7 +659,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/get_privacy", method = RequestMethod.GET)
     public APIResult<Object> getPrivacy() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         Users users = userManager.getUser(currentUserId);
 
@@ -678,7 +678,7 @@ public class UserController extends BaseController {
         Integer pokeStatus = userParam.getPokeStatus();
         ValidateUtils.checkPokeStatus(pokeStatus);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         Users u = new Users();
         u.setId(currentUserId);
         u.setPokeStatus(pokeStatus);
@@ -690,7 +690,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/get_poke", method = RequestMethod.GET)
     public APIResult<Object> getPokeStatus() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         Users users = userManager.getUser(currentUserId);
         Map<String, Object> result = new HashMap<>();
         result.put("pokeStatus", users.getPokeStatus());
@@ -703,7 +703,7 @@ public class UserController extends BaseController {
      * @param response
      * @param userId
      */
-    private void setCookie(HttpServletResponse response, int userId) {
+    private void setCookie(HttpServletResponse response, long userId) {
         int salt = RandomUtil.randomBetween(1000, 9999);
         String text = salt + Constants.SEPARATOR_NO + userId + Constants.SEPARATOR_NO + System.currentTimeMillis();
         byte[] value = AES256.encrypt(text, sealtalkConfig.getAuthCookieKey());
@@ -727,7 +727,7 @@ public class UserController extends BaseController {
     public APIResult<Object> batch(@RequestParam("id") String[] id) throws ServiceException {
 
         ValidateUtils.notEmpty(id);
-        Integer[] userIds = MiscUtils.decodeIds(id);
+        Long[] userIds = MiscUtils.decodeIds(id);
         List<Users> userList = userManager.getBatchUser(CollectionUtils.arrayToList(userIds));
         List<Map<String, Object>> resultMap = new ArrayList<>();
         if (!CollectionUtils.isEmpty(userList)) {

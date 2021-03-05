@@ -17,7 +17,7 @@ import java.util.List;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class BlackListsService extends AbstractBaseService<BlackLists, Integer> {
+public class BlackListsService extends AbstractBaseService<BlackLists, Long> {
 
     @Resource
     private BlackListsMapper mapper;
@@ -36,7 +36,7 @@ public class BlackListsService extends AbstractBaseService<BlackLists, Integer> 
      * @param status
      * @param timestamp
      */
-    public void saveOrUpdate(Integer userId, Integer friendId, Integer status, long timestamp) {
+    public void saveOrUpdate(Long userId, Long friendId, Integer status, long timestamp) {
         Example example = new Example(BlackLists.class);
         example.createCriteria().andEqualTo("userId", userId)
                 .andEqualTo("friendId", friendId);
@@ -68,7 +68,7 @@ public class BlackListsService extends AbstractBaseService<BlackLists, Integer> 
      * @param currentUserId
      * @return
      */
-    public List<BlackLists> getBlackListsWithFriendUsers(Integer currentUserId) {
+    public List<BlackLists> getBlackListsWithFriendUsers(Long currentUserId) {
         return mapper.selectBlackListsWithFriendUsers(currentUserId);
     }
 
@@ -80,7 +80,7 @@ public class BlackListsService extends AbstractBaseService<BlackLists, Integer> 
      * @param status
      * @param timestamp
      */
-    public void updateStatus(Integer userId, Integer friendId, Integer status, long timestamp) {
+    public void updateStatus(Long userId, Long friendId, Integer status, long timestamp) {
 
         BlackLists blackLists = new BlackLists();
         blackLists.setUpdatedAt(new Date());
@@ -94,7 +94,7 @@ public class BlackListsService extends AbstractBaseService<BlackLists, Integer> 
 
     }
 
-    public List<BlackLists> getBlackListsWithFriendUsers(Integer currentUserId, Long timestamp) {
+    public List<BlackLists> getBlackListsWithFriendUsers(Long currentUserId, Long timestamp) {
 
         return mapper.selectBlackListsWithUsersAndVersion(currentUserId,timestamp);
     }

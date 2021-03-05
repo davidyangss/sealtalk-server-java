@@ -24,7 +24,7 @@ public class UsersServiceTest {
 
     @Test
     public void testGetByPrimaryKey() {
-        Integer id = 1;
+        Long id = 1l;
         Users u = usersService.getByPrimaryKey(id);
         System.out.println(u);
     }

@@ -7,7 +7,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 public interface BlackListsMapper extends Mapper<BlackLists> {
-    List<BlackLists> selectBlackListsWithFriendUsers(@Param("userId") Integer userId);
+    List<BlackLists> selectBlackListsWithFriendUsers(@Param("userId") Long userId);
 
-    List<BlackLists> selectBlackListsWithUsersAndVersion(@Param("userId") Integer currentUserId, @Param("version") Long timestamp);
+    List<BlackLists> selectBlackListsWithUsersAndVersion(@Param("userId") Long currentUserId, @Param("version") Long timestamp);
 }

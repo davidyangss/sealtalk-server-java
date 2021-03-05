@@ -17,10 +17,10 @@ public class BlackLists implements Serializable {
     private Integer id;
 
     @Column(name="userId")
-    private Integer userId;
+    private Long userId;
 
     @Column(name="friendId")
-    private Integer friendId;
+    private Long friendId;
 
     //黑名单状态 1 有效，0无效
     private Integer status;
@@ -46,19 +46,19 @@ public class BlackLists implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Integer getFriendId() {
+    public Long getFriendId() {
         return friendId;
     }
 
-    public void setFriendId(Integer friendId) {
+    public void setFriendId(Long friendId) {
         this.friendId = friendId;
     }
 

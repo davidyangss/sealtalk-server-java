@@ -51,7 +51,7 @@ public class GroupsService extends AbstractBaseService<Groups, String> {
      * @param timestamp
      * @param creatorId
      */
-    public void updateMemberCountAndCreatorId(String groupId, Integer memberCount, Long timestamp, Integer creatorId) {
+    public void updateMemberCountAndCreatorId(String groupId, Integer memberCount, Long timestamp, Long creatorId) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(memberCount,"memberCount is null");
         Assert.notNull(timestamp,"timestamp is null");

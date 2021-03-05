@@ -20,7 +20,7 @@ public class GroupExitedLists implements Serializable {
     private String groupId;
 
     @Column(name = "quitUserId")
-    private Integer quitUserId;
+    private Long quitUserId;
 
     @Column(name = "quitNickname")
     private String quitNickname;
@@ -35,7 +35,7 @@ public class GroupExitedLists implements Serializable {
     private Long quitTime;
 
     @Column(name = "operatorId")
-    private Integer operatorId;
+    private Long operatorId;
 
     @Column(name = "operatorName")
     private String operatorName;
@@ -73,14 +73,14 @@ public class GroupExitedLists implements Serializable {
     /**
      * @return quitUserId
      */
-    public Integer getQuitUserId() {
+    public Long getQuitUserId() {
         return quitUserId;
     }
 
     /**
      * @param quitUserId
      */
-    public void setQuitUserId(Integer quitUserId) {
+    public void setQuitUserId(Long quitUserId) {
         this.quitUserId = quitUserId;
     }
 
@@ -143,14 +143,14 @@ public class GroupExitedLists implements Serializable {
     /**
      * @return operatorId
      */
-    public Integer getOperatorId() {
+    public Long getOperatorId() {
         return operatorId;
     }
 
     /**
      * @param operatorId
      */
-    public void setOperatorId(Integer operatorId) {
+    public void setOperatorId(Long operatorId) {
         this.operatorId = operatorId;
     }
 

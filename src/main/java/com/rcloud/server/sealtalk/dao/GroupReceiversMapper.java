@@ -9,11 +9,11 @@ import java.util.List;
 public interface GroupReceiversMapper extends Mapper<GroupReceivers> {
 
 
-    List<GroupReceivers> selectReceiversWithList(@Param("groupId") String groupId,@Param("requesterId") Integer requesterId,@Param("receiverIdList") List<Integer> receiverIdList,@Param("operatorList") List<Integer> operatorList,@Param("groupReceiveType") int groupReceiveType);
+    List<GroupReceivers> selectReceiversWithList(@Param("groupId") String groupId,@Param("requesterId") Long requesterId,@Param("receiverIdList") List<Long> receiverIdList,@Param("operatorList") List<Long> operatorList,@Param("groupReceiveType") int groupReceiveType);
 
-    int updateReceiversWithList(@Param("requesterIdForUpdate") Integer requesterIdForUpdate,@Param("timestamp") Long timestamp,@Param("status") Integer status,@Param("groupId") String groupId,@Param("requesterId") Integer requesterId,@Param("receiverIdList") List<Integer> receiverIdList,@Param("operatorList") List<Integer> operatorList,@Param("groupReceiveType") int groupReceiveType);
+    int updateReceiversWithList(@Param("requesterIdForUpdate") Long requesterIdForUpdate,@Param("timestamp") Long timestamp,@Param("status") Integer status,@Param("groupId") String groupId,@Param("requesterId") Long requesterId,@Param("receiverIdList") List<Long> receiverIdList,@Param("operatorList") List<Long> operatorList,@Param("groupReceiveType") int groupReceiveType);
 
     int insertBatch(@Param("groupReceiverList") List<GroupReceivers> groupReceiverList);
 
-    List<GroupReceivers> selectGroupReceiversWithIncludes(@Param("userId") Integer userId);
+    List<GroupReceivers> selectGroupReceiversWithIncludes(@Param("userId") Long userId);
 }

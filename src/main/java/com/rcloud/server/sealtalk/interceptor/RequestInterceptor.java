@@ -104,7 +104,7 @@ public class RequestInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            Integer currentUserId = null;
+            Long currentUserId = null;
             try {
                 currentUserId = getCurrentUserId(authCookie);
                 serverApiParams.setCurrentUserId(currentUserId);
@@ -128,7 +128,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         ServerApiParamHolder.remove();
     }
 
-    private Integer getCurrentUserId(Cookie authCookie) throws ServiceException {
+    private Long getCurrentUserId(Cookie authCookie) throws ServiceException {
         String cookieValue = authCookie.getValue();
         String decrypt = AES256.decrypt(cookieValue.getBytes(), sealtalkConfig.getAuthCookieKey());
         assert decrypt != null;
@@ -136,7 +136,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         if (split.length != 3) {
             throw new ServiceException(ErrorCode.COOKIE_ERROR, "Invalid cookie value!");
         }
-        return Integer.parseInt(split[1]);
+        return Long.parseLong(split[1]);
     }
 
     private Cookie getAuthCookie(HttpServletRequest request) {

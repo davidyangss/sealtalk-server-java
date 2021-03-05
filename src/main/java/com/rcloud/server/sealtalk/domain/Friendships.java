@@ -27,10 +27,10 @@ public class Friendships implements Serializable {
     private Integer id;
 
     @Column(name = "userId")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "friendId")
-    private Integer friendId;
+    private Long friendId;
 
     @Column(name = "displayName")
     private String displayName;
@@ -78,28 +78,28 @@ public class Friendships implements Serializable {
     /**
      * @return userId
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     /**
      * @param userId
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     /**
      * @return friendId
      */
-    public Integer getFriendId() {
+    public Long getFriendId() {
         return friendId;
     }
 
     /**
      * @param friendId
      */
-    public void setFriendId(Integer friendId) {
+    public void setFriendId(Long friendId) {
         this.friendId = friendId;
     }
 

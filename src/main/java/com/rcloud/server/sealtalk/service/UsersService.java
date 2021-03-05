@@ -19,7 +19,7 @@ import java.util.List;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class UsersService extends AbstractBaseService<Users, Integer> {
+public class UsersService extends AbstractBaseService<Users, Long> {
 
     @Resource
     private UsersMapper mapper;
@@ -29,7 +29,7 @@ public class UsersService extends AbstractBaseService<Users, Integer> {
         return mapper;
     }
 
-    public String getCurrentUserNickNameWithCache(Integer currentUserId) {
+    public String getCurrentUserNickNameWithCache(Long currentUserId) {
 
         Assert.notNull(currentUserId,"currentUserId is null");
 
@@ -44,7 +44,7 @@ public class UsersService extends AbstractBaseService<Users, Integer> {
         return nickName;
     }
 
-    public List<Users> getUsers(List<Integer> ids) {
+    public List<Users> getUsers(List<Long> ids) {
         Assert.notEmpty(ids, "ids is empty");
 
         Example example = new Example(Users.class);

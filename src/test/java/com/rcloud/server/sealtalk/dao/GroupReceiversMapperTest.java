@@ -26,10 +26,10 @@ public class GroupReceiversMapperTest {
     @Test
     public void name() {
         String groupId = "1";
-        Integer requesterId = null;
+        Long requesterId = null;
         Integer groupReceiveType=2;
-        List<Integer> operatorList = ImmutableList.of(100,101,102);
-        List<Integer> receiverIdList = ImmutableList.of(200,201,202);
+        List<Long> operatorList = ImmutableList.of(100l,101l,102l);
+        List<Long> receiverIdList = ImmutableList.of(200l,201l,202l);
 
         List<GroupReceivers> groupReceiversList = groupReceiversMapper.selectReceiversWithList(groupId,requesterId,receiverIdList,operatorList,groupReceiveType);
 

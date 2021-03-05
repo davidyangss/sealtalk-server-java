@@ -66,9 +66,9 @@ public class GroupController extends BaseController {
         if (portraitUri == null) {
             portraitUri = "";
         }
-        Integer[] decodeMemberIds = MiscUtils.decodeIds(memberIds);
+        Long[] decodeMemberIds = MiscUtils.decodeIds(memberIds);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         GroupAddStatusDTO groupAddStatusDTO = groupManager.createGroup(currentUserId, name, decodeMemberIds, portraitUri);
 
         return APIResultWrap.ok(groupAddStatusDTO);
@@ -84,7 +84,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.notEmpty(memberIds);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         List<UserStatusDTO> userStatusDTOList = groupManager.addMember(currentUserId, groupId, MiscUtils.decodeIds(memberIds));
 
@@ -99,7 +99,7 @@ public class GroupController extends BaseController {
 
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.joinGroup(currentUserId, groupId, groupId);
 
         return APIResultWrap.ok();
@@ -114,7 +114,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.notEmpty(memberIds);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.kickMember(currentUserId, groupId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
 
         return APIResultWrap.ok();
@@ -127,7 +127,7 @@ public class GroupController extends BaseController {
         String groupId = groupParam.getGroupId();
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         String resultMessage = groupManager.quitGroup(currentUserId, groupId, groupId);
         return APIResultWrap.ok(null,resultMessage);
@@ -142,7 +142,7 @@ public class GroupController extends BaseController {
 
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.dismiss(currentUserId, groupId, groupId);
         return APIResultWrap.ok();
@@ -158,7 +158,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(userId);
 
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.transfer(currentUserId, groupId, N3d.decode(userId), userId);
         return APIResultWrap.ok();
@@ -173,7 +173,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.notEmpty(memberIds);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.batchSetManager(currentUserId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
         return APIResultWrap.ok();
@@ -189,7 +189,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.notEmpty(memberIds);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.batchRemoveManager(currentUserId, groupId, MiscUtils.decodeIds(memberIds), memberIds);
 
@@ -206,7 +206,7 @@ public class GroupController extends BaseController {
         name = MiscUtils.xss(name, ValidateUtils.GROUP_NAME_MAX_LENGTH);
         ValidateUtils.checkGroupName(name);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.rename(currentUserId, groupId, name, groupId);
 
         return APIResultWrap.ok();
@@ -222,7 +222,7 @@ public class GroupController extends BaseController {
             throw new ServiceException(ErrorCode.GROUPID_NULL);
         }
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.fav(currentUserId, groupId);
         return APIResultWrap.ok();
     }
@@ -234,7 +234,7 @@ public class GroupController extends BaseController {
         String groupId = groupParam.getGroupId();
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.deletefav(currentUserId, groupId);
         return APIResultWrap.ok();
     }
@@ -257,7 +257,7 @@ public class GroupController extends BaseController {
         bulletin = MiscUtils.xss(bulletin, ValidateUtils.GROUP_BULLETIN_MAX_LENGTH);
         ValidateUtils.checkGroupBulletion(bulletin);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.setBulletin(currentUserId, groupId, bulletin);
 
         return APIResultWrap.ok();
@@ -300,7 +300,7 @@ public class GroupController extends BaseController {
         portraitUri = MiscUtils.xss(portraitUri, ValidateUtils.PORTRAIT_URI_MAX_LENGTH);
         ValidateUtils.checkGroupPortraitUri(portraitUri);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.setGroupPortraitUri(currentUserId, groupId, portraitUri);
         return APIResultWrap.ok("群头像设置成功");
@@ -319,7 +319,7 @@ public class GroupController extends BaseController {
         displayName = MiscUtils.xss(displayName, ValidateUtils.GROUP_MEMBER_DISPLAY_NAME_MAX_LENGTH);
         ValidateUtils.checkGroupDisplayName(displayName);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.setDisPlayName(currentUserId, groupId, displayName);
         return APIResultWrap.ok();
@@ -359,7 +359,7 @@ public class GroupController extends BaseController {
 
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         List<GroupMembers> groupMembersList = groupManager.getGroupMembers(currentUserId, groupId);
 
@@ -407,7 +407,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(groupId);
         ValidateUtils.valueOf(certiStatus, ImmutableList.of(Groups.CERTI_STATUS_OPENED, Groups.CERTI_STATUS_CLOSED));
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.setCertification(currentUserId, groupId, certiStatus);
         return APIResultWrap.ok("");
@@ -417,7 +417,7 @@ public class GroupController extends BaseController {
     @RequestMapping(value = "/notice_info", method = RequestMethod.GET)
     public APIResult<?> getNoticeInfo() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         List<GroupReceivers> groupReceiversList = groupManager.getNoticeInfo(currentUserId);
         List<GroupReceiverDTO> groupReceiverDTOList = new ArrayList<>();
@@ -463,7 +463,7 @@ public class GroupController extends BaseController {
     @RequestMapping(value = "/clear_notice", method = RequestMethod.POST)
     public APIResult<Object> clearNotice() throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.clearNotice(currentUserId);
 
@@ -483,7 +483,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notNull(muteStatus);
         ValidateUtils.valueOf(muteStatus, ImmutableList.of(0, 1));
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.setMuteAll(currentUserId, groupId, muteStatus, MiscUtils.decodeIds(userId));
 
@@ -501,7 +501,7 @@ public class GroupController extends BaseController {
         //清理选项： 0 关闭、 3 清理 3 天前、 7 清理 7 天前、 36 清理 36 小时前
         ValidateUtils.valueOf(clearStatus, ImmutableList.of(0, 3, 7, 36));
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         groupManager.setRegularClear(currentUserId, groupId, clearStatus);
 
@@ -598,7 +598,7 @@ public class GroupController extends BaseController {
         String groupId = groupParam.getGroupId();
         ValidateUtils.notEmpty(groupId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         List<GroupExitedListDTO> groupExitedListDTOList = new ArrayList<>();
         List<GroupExitedLists> groupExitedListsList = groupManager.getExitedList(currentUserId, N3d.decode(groupId));
         if (!CollectionUtils.isEmpty(groupExitedListsList)) {
@@ -623,7 +623,7 @@ public class GroupController extends BaseController {
         }
         ValidateUtils.valueOf(memberProtection, ImmutableList.of(0, 1));
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.setMemberProtection(currentUserId, groupId, memberProtection);
         return APIResultWrap.ok();
 
@@ -642,7 +642,7 @@ public class GroupController extends BaseController {
         ValidateUtils.checkGroupName(name);
         portraitUri = MiscUtils.xss(portraitUri, ValidateUtils.PORTRAIT_URI_MAX_LENGTH);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         GroupAddStatusDTO groupAddStatusDTO = groupManager.copyGroup(currentUserId, groupId, name, portraitUri);
         return APIResultWrap.ok(groupAddStatusDTO);
 
@@ -660,7 +660,7 @@ public class GroupController extends BaseController {
         ValidateUtils.notEmpty(receiverId);
         ValidateUtils.valueOf(status, ImmutableList.of("0", "1"));
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         groupManager.agree(currentUserId, groupId, N3d.decode(receiverId), status);
         return APIResultWrap.ok();
 
