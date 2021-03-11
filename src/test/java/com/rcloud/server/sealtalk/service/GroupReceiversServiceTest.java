@@ -33,8 +33,8 @@ public class GroupReceiversServiceTest {
         long beginTime = System.currentTimeMillis();
 
         List<GroupReceivers> groupReceiversList = new ArrayList<>();
-        Integer requesterId = 113;
-        Integer receiveId = 110;
+        Long requesterId = 113l;
+        Long receiveId = 110l;
         String groupId = "27";
         String groupName = "测试群for批量插入";
         for(int i=0;i<1003;i++){

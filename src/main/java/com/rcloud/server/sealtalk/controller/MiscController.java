@@ -226,7 +226,7 @@ public class MiscController extends BaseController {
         ValidateUtils.notEmpty(objectName);
         ValidateUtils.notEmpty(content);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         miscManager.sendMessage(currentUserId, conversationType, N3d.decode(targetId), objectName, content, pushContent, targetId);
         return APIResultWrap.ok();
     }
@@ -247,7 +247,7 @@ public class MiscController extends BaseController {
         }
         ValidateUtils.notNull(noticeStatus);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         miscManager.setScreenCapture(currentUserId, N3d.decode(targetId), conversationType, noticeStatus);
         return APIResultWrap.ok();
@@ -264,7 +264,7 @@ public class MiscController extends BaseController {
         ValidateUtils.notNull(conversationType);
         ValidateUtils.notEmpty(targetId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         ScreenStatuses screenStatuses = miscManager.getScreenCapture(currentUserId, N3d.decode(targetId), conversationType);
         Map<String, Object> result = new HashMap<>();
@@ -286,7 +286,7 @@ public class MiscController extends BaseController {
         ValidateUtils.notNull(conversationType);
         ValidateUtils.notEmpty(targetId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         miscManager.sendScreenCaptureMsg(currentUserId, N3d.decode(targetId), conversationType);
 

@@ -81,7 +81,7 @@ public class FriendShipManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public InviteDTO invite(Integer currentUserId, Integer friendId, String message)
+    public InviteDTO invite(Long currentUserId, Long friendId, String message)
             throws ServiceException {
         log.info("invite user. currentUserId:[{}] friendId:[{}]", currentUserId, friendId);
         InviteDTO inviteResponse = null;
@@ -99,7 +99,7 @@ public class FriendShipManager extends BaseManager {
         return inviteResponse;
     }
 
-    private InviteDTO addVerifyFriend(Integer currentUserId, Integer friendId, String message)
+    private InviteDTO addVerifyFriend(Long currentUserId, Long friendId, String message)
             throws ServiceException {
         String action = NONE;
         String resultMessage = "";
@@ -255,7 +255,7 @@ public class FriendShipManager extends BaseManager {
      * @param message
      * @param timestamp
      */
-    private void doAddFriend1(Integer currentUserId, Integer friendId, String message, long timestamp) {
+    private void doAddFriend1(Long currentUserId, Long friendId, String message, long timestamp) {
         transactionTemplate.execute(new TransactionCallback<Boolean>() {
             @Override
             public Boolean doInTransaction(TransactionStatus transactionStatus) {
@@ -314,7 +314,7 @@ public class FriendShipManager extends BaseManager {
         });
     }
 
-    private InviteDTO addNoNeedVerifyFriend(Integer currentUserId, Integer friendId, String message) throws ServiceException {
+    private InviteDTO addNoNeedVerifyFriend(Long currentUserId, Long friendId, String message) throws ServiceException {
         String action = NONE;
         String resultMessage = "";
         long timestamp = System.currentTimeMillis();
@@ -343,7 +343,7 @@ public class FriendShipManager extends BaseManager {
 
     }
 
-    private void doAddFriend2(Integer currentUserId, Integer friendId, String message, long timestamp) {
+    private void doAddFriend2(Long currentUserId, Long friendId, String message, long timestamp) {
 
         transactionTemplate.execute(new TransactionCallback<Boolean>() {
             @Override
@@ -375,7 +375,7 @@ public class FriendShipManager extends BaseManager {
         });
     }
 
-    private void updateBlackListStatus(Integer currentUserId, Integer friendId) {
+    private void updateBlackListStatus(Long currentUserId, Long friendId) {
         BlackLists bl = new BlackLists();
         bl.setFriendId(friendId);
         bl.setUserId(currentUserId);
@@ -391,7 +391,7 @@ public class FriendShipManager extends BaseManager {
      *
      * @param userId
      */
-    private void refreshFriendshipVersion(Integer userId, long timestamp) {
+    private void refreshFriendshipVersion(Long userId, long timestamp) {
         DataVersions dataVersions = new DataVersions();
         dataVersions.setUserId(userId);
         dataVersions.setFriendshipVersion(timestamp);
@@ -440,7 +440,7 @@ public class FriendShipManager extends BaseManager {
      * @param friendId
      * @throws ServiceException
      */
-    public void agree(Integer currentUserId, Integer friendId) throws ServiceException {
+    public void agree(Long currentUserId, Long friendId) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         //删除黑名单
         removeBlackList(currentUserId, friendId);
@@ -460,7 +460,7 @@ public class FriendShipManager extends BaseManager {
         return;
     }
 
-    private void doAgree0(Integer currentUserId, Integer friendId, long timestamp) {
+    private void doAgree0(Long currentUserId, Long friendId, long timestamp) {
 
         transactionTemplate.execute(new TransactionCallback<Boolean>() {
             @Override
@@ -493,7 +493,7 @@ public class FriendShipManager extends BaseManager {
      * @param friendId
      * @throws ServiceException
      */
-    private void removeBlackList(Integer currentUserId, Integer friendId) throws ServiceException {
+    private void removeBlackList(Long currentUserId, Long friendId) throws ServiceException {
         rongCloudClient.removeUserBlackList(N3d.encode(currentUserId), new String[]{N3d.encode(friendId)});
         rongCloudClient.removeUserBlackList(N3d.encode(friendId), new String[]{N3d.encode(currentUserId)});
         updateBlackListStatus(currentUserId, friendId);
@@ -508,7 +508,8 @@ public class FriendShipManager extends BaseManager {
      * @param friendId
      * @throws ServiceException
      */
-    public void ignore(Integer currentUserId, Integer friendId) throws ServiceException {
+    public void ignore(Long currentUserId, Long
+             friendId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         //更新对方Friendship好友关系表中的状态为FRIENDSHIP_IGNORED
@@ -537,7 +538,7 @@ public class FriendShipManager extends BaseManager {
      * @param currentUserId
      * @param friendId
      */
-    public void delete(Integer currentUserId, Integer friendId) throws ServiceException {
+    public void delete(Long currentUserId, Long friendId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -607,7 +608,7 @@ public class FriendShipManager extends BaseManager {
      * @param friendId
      * @param displayName
      */
-    public void setDisplayName(Integer currentUserId, Integer friendId, String displayName) throws ServiceException {
+    public void setDisplayName(Long currentUserId, Long friendId, String displayName) throws ServiceException {
         long timestamp = System.currentTimeMillis();
 
         //更新好友备注
@@ -640,7 +641,7 @@ public class FriendShipManager extends BaseManager {
      * @param currentUserId
      * @return
      */
-    public List<Friendships> getFriendList(Integer currentUserId) throws ServiceException {
+    public List<Friendships> getFriendList(Long currentUserId) throws ServiceException {
 
         String result = CacheUtil.get(CacheUtil.FRIENDSHIP_ALL_CACHE_PREFIX + currentUserId);
 
@@ -661,7 +662,7 @@ public class FriendShipManager extends BaseManager {
      * @param friendId
      * @return
      */
-    public Friendships getFriendProfile(Integer currentUserId, Integer friendId) throws ServiceException {
+    public Friendships getFriendProfile(Long currentUserId, Long friendId) throws ServiceException {
 
 
         String result = CacheUtil.get(CacheUtil.FRIENDSHIP_PROFILE_CACHE_PREFIX + currentUserId + "_" + friendId);
@@ -689,7 +690,7 @@ public class FriendShipManager extends BaseManager {
      * @param currentUserId
      * @param contactList
      */
-    public List<ContractInfoDTO> getContactsInfo(Integer currentUserId, String[] contactList) throws ServiceException {
+    public List<ContractInfoDTO> getContactsInfo(Long currentUserId, String[] contactList) throws ServiceException {
 
         List<ContractInfoDTO> contractInfoDTOList = new ArrayList<>();
 
@@ -699,10 +700,10 @@ public class FriendShipManager extends BaseManager {
         example.selectProperties("id", "phone", "nickname", "portraitUri", "stAccount");
         List<Users> usersList = usersService.getByExample(example);
 
-        List<Integer> registerUserIdList = new ArrayList<>();
+        List<Long> registerUserIdList = new ArrayList<>();
         Map<String, Users> registerUsers = new HashMap<>();
 
-        List<Integer> friendIdList = new ArrayList<>();
+        List<Long> friendIdList = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(usersList)) {
             for (Users users : usersList) {
@@ -755,7 +756,7 @@ public class FriendShipManager extends BaseManager {
         return contractInfoDTOList;
     }
 
-    public void batchDelete(Integer currentUserId, List<Integer> friendIds) throws ServiceException {
+    public void batchDelete(Long currentUserId, List<Long> friendIds) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Friendships friendships = new Friendships();
@@ -789,7 +790,7 @@ public class FriendShipManager extends BaseManager {
      * @param description
      * @param imageUri
      */
-    public void setFriendDescription(Integer currentUserId, Integer friendId, String displayName, String region, String phone, String description, String imageUri) throws ServiceException {
+    public void setFriendDescription(Long currentUserId, Long friendId, String displayName, String region, String phone, String description, String imageUri) throws ServiceException {
 
         Example example = new Example(Friendships.class);
         example.createCriteria().andEqualTo("userId", currentUserId)
@@ -835,7 +836,7 @@ public class FriendShipManager extends BaseManager {
      * @param currentUserId
      * @param friendId
      */
-    public FriendDTO getFriendDescription(Integer currentUserId, Integer friendId) {
+    public FriendDTO getFriendDescription(Long currentUserId, Long friendId) {
         FriendDTO friendDTO = new FriendDTO();
         Example example = new Example(Friendships.class);
         example.createCriteria().andEqualTo("userId", currentUserId)

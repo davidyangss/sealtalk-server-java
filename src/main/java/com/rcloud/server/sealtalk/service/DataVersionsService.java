@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class DataVersionsService extends AbstractBaseService<DataVersions, Integer> {
+public class DataVersionsService extends AbstractBaseService<DataVersions, Long> {
 
     @Resource
     private DataVersionsMapper mapper;
@@ -25,7 +25,7 @@ public class DataVersionsService extends AbstractBaseService<DataVersions, Integ
     }
 
 
-    public void updateAllFriendshipVersion(Integer userId, long timestamp) {
+    public void updateAllFriendshipVersion(Long userId, long timestamp) {
         mapper.updateAllFriendshipVersion(userId, timestamp);
     }
 
@@ -46,7 +46,7 @@ public class DataVersionsService extends AbstractBaseService<DataVersions, Integ
      * @param userId
      * @param timestamp
      */
-    public void updateBlacklistVersion(Integer userId, long timestamp) {
+    public void updateBlacklistVersion(Long userId, long timestamp) {
 
         DataVersions dataVersions = new DataVersions();
         dataVersions.setUserId(userId);

@@ -25,7 +25,7 @@ public class GroupReceivers implements Serializable {
     private Integer id;
 
     @Column(name = "userId")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "groupId")
     private String groupId;
@@ -37,10 +37,10 @@ public class GroupReceivers implements Serializable {
     private String groupPortraitUri;
 
     @Column(name = "requesterId")
-    private Integer requesterId;
+    private Long requesterId;
 
     @Column(name = "receiverId")
-    private Integer receiverId;
+    private Long receiverId;
 
     private Integer type;
 
@@ -90,14 +90,14 @@ public class GroupReceivers implements Serializable {
     /**
      * @return userId
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     /**
      * @param userId
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -140,28 +140,28 @@ public class GroupReceivers implements Serializable {
     /**
      * @return requesterId
      */
-    public Integer getRequesterId() {
+    public Long getRequesterId() {
         return requesterId;
     }
 
     /**
      * @param requesterId
      */
-    public void setRequesterId(Integer requesterId) {
+    public void setRequesterId(Long requesterId) {
         this.requesterId = requesterId;
     }
 
     /**
      * @return receiverId
      */
-    public Integer getReceiverId() {
+    public Long getReceiverId() {
         return receiverId;
     }
 
     /**
      * @param receiverId
      */
-    public void setReceiverId(Integer receiverId) {
+    public void setReceiverId(Long receiverId) {
         this.receiverId = receiverId;
     }
 

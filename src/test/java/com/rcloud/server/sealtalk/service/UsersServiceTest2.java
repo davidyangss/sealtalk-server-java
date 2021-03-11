@@ -24,7 +24,7 @@ public class UsersServiceTest2 {
 
     @Test
     public void testGetByPrimaryKey() {
-        Integer id = 1;
+        Long id = 1l;
         Users users = usersService.getByPrimaryKey(id);
         System.out.println(users);
     }
@@ -86,7 +86,7 @@ public class UsersServiceTest2 {
         u.setPasswordHash("passwordHashStr");
         u.setPasswordSalt("9999");
         u.setGroupCount(0);
-        u.setId(9);
+        u.setId(9l);
 
         int count = usersService.updateByPrimaryKeySelective(u);
         System.out.println(count);
@@ -114,7 +114,7 @@ public class UsersServiceTest2 {
         u.setCreatedAt(new Date());
         u.setUpdatedAt(u.getCreatedAt());
         u.setDeletedAt(new Date());
-        u.setId(9);
+        u.setId(9l);
 
         int count = usersService.updateByPrimaryKey(u);
         System.out.println(count);

@@ -124,14 +124,14 @@ public class N3d {
         return String.valueOf(num);
     }
 
-    public static int decode(String str) {
+    public static long decode(String str) {
 //        try {
 //            Long id= n3d.decrypt(str);
 //            return id.intValue();
 //        }catch (Exception e){
 //            throw new ServiceException(ErrorCode.REQUEST_ERROR,"id format error");
 //        }
-        return Integer.parseInt(str);
+        return Long.parseLong(str);
     }
 
     public static void main(String[] args) {

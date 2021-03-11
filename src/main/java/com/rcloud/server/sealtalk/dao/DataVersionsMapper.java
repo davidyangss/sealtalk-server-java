@@ -6,7 +6,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface DataVersionsMapper extends Mapper<DataVersions> {
 
-    void updateAllFriendshipVersion(@Param("userId") int userId,@Param("timestamp") long timestamp);
+    void updateAllFriendshipVersion(@Param("userId") Long userId,@Param("timestamp") long timestamp);
 
     void updateGroupMemberVersion(@Param("groupId") String groupId, @Param("timestamp") long timestamp);
 

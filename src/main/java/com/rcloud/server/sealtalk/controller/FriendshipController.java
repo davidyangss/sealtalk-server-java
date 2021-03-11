@@ -62,7 +62,7 @@ public class FriendshipController extends BaseController {
         message = MiscUtils.xss(message, ValidateUtils.FRIEND_REQUEST_MESSAGE_MAX_LENGTH);
          //去掉邀请好友的提示信息
         ValidateUtils.checkInviteMessage(message);
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         
         InviteDTO inviteResponse = friendShipManager.invite(currentUserId, N3d.decode(friendId), message);
         return APIResultWrap.ok(inviteResponse);
@@ -75,7 +75,7 @@ public class FriendshipController extends BaseController {
 
         String friendId = friendshipParam.getFriendId();
         ValidateUtils.notEmpty(friendId);
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         friendShipManager.agree(currentUserId, N3d.decode(friendId));
         return APIResultWrap.ok();
     }
@@ -86,7 +86,7 @@ public class FriendshipController extends BaseController {
         String friendId = friendshipParam.getFriendId();
         ValidateUtils.notEmpty(friendId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         friendShipManager.ignore(currentUserId, N3d.decode(friendId));
         return APIResultWrap.ok();
     }
@@ -98,7 +98,7 @@ public class FriendshipController extends BaseController {
         String friendId = friendshipParam.getFriendId();
         ValidateUtils.notEmpty(friendId);
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         friendShipManager.delete(currentUserId, N3d.decode(friendId));
         return APIResultWrap.ok();
     }
@@ -113,7 +113,7 @@ public class FriendshipController extends BaseController {
         String displayName = friendshipParam.getDisplayName();
         displayName = MiscUtils.xss(displayName, ValidateUtils.FRIEND_REQUEST_MESSAGE_MAX_LENGTH);
         ValidateUtils.checkDisplayName(displayName);
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         friendShipManager.setDisplayName(currentUserId, N3d.decode(friendId), displayName);
         return APIResultWrap.ok();
     }
@@ -124,7 +124,7 @@ public class FriendshipController extends BaseController {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         List<Friendships> friendshipsList = friendShipManager.getFriendList(currentUserId);
 
@@ -164,7 +164,7 @@ public class FriendshipController extends BaseController {
             @ApiParam(name = "friendId", value = "好友 Id", required = true, type = "String", example = "xxx")
             @PathVariable String friendId) throws ServiceException {
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         Friendships friendships = friendShipManager.getFriendProfile(currentUserId, N3d.decode(friendId));
 
@@ -196,7 +196,7 @@ public class FriendshipController extends BaseController {
             throw new ServiceException(ErrorCode.EMPTY_ContactList);
         }
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
         List<ContractInfoDTO> contractInfoDTOList = friendShipManager.getContactsInfo(currentUserId, contactList);
         return APIResultWrap.ok(contractInfoDTOList);
     }
@@ -207,12 +207,12 @@ public class FriendshipController extends BaseController {
         String[] friendIds = friendshipParam.getFriendIds();
         ValidateUtils.notEmpty(friendIds);
 
-        List<Integer> decodeFriendIds = new ArrayList<>();
+        List<Long> decodeFriendIds = new ArrayList<>();
         for (String friendId : friendIds) {
             decodeFriendIds.add(N3d.decode(friendId));
         }
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         friendShipManager.batchDelete(currentUserId, decodeFriendIds);
         return APIResultWrap.ok();
@@ -243,7 +243,7 @@ public class FriendshipController extends BaseController {
         }
 
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
         friendShipManager.setFriendDescription(currentUserId, N3d.decode(friendId), displayName, region, phone, description, imageUri);
 
@@ -260,7 +260,7 @@ public class FriendshipController extends BaseController {
             return APIResultWrap.error(ErrorCode.PARAM_ERROR);
         }
 
-        Integer currentUserId = getCurrentUserId();
+        Long currentUserId = getCurrentUserId();
 
 
         FriendDTO dto = friendShipManager.getFriendDescription(currentUserId, N3d.decode(friendId));

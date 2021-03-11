@@ -118,14 +118,14 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public GroupAddStatusDTO createGroup(Integer currentUserId, String groupName, Integer[] memberIds, String portraitUri) throws ServiceException {
+    public GroupAddStatusDTO createGroup(Long currentUserId, String groupName, Long[] memberIds, String portraitUri) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
         List<UserStatusDTO> userStatusDTOList = new ArrayList<>();
 
         //取得不包含当前用户的群成员 集合
-        Integer[] joinUserIds = ArrayUtils.removeElement(memberIds, currentUserId);
+        Long[] joinUserIds = ArrayUtils.removeElement(memberIds, currentUserId);
 
         Example example = new Example(GroupMembers.class);
         example.createCriteria().andEqualTo("memberId", currentUserId);
@@ -136,10 +136,10 @@ public class GroupManager extends BaseManager {
         }
 
         //开启了加入群验证，不允许直接加入群聊的用户
-        List<Integer> veirfyNeedUserList = new ArrayList<>();
+        List<Long> veirfyNeedUserList = new ArrayList<>();
 
         //未开启加入群验证，允许直接加入群聊的用户
-        List<Integer> verifyNoNeedUserList = new ArrayList<>();
+        List<Long> verifyNoNeedUserList = new ArrayList<>();
 
         //查询所有成员的用户区分是否开启了入群验证
         List<Users> usersList = usersService.getUsers(Arrays.asList(joinUserIds));
@@ -187,11 +187,11 @@ public class GroupManager extends BaseManager {
         }
 
 
-        List<Integer> megerUserIdList = new ArrayList<>(verifyNoNeedUserList);
+        List<Long> megerUserIdList = new ArrayList<Long>(verifyNoNeedUserList);
         megerUserIdList.add(currentUserId);
 
         //构建返回结果
-        for (int id : megerUserIdList) {
+        for (Long id : megerUserIdList) {
             UserStatusDTO userStatusDTO = new UserStatusDTO();
             userStatusDTO.setId(N3d.encode(id));
             userStatusDTO.setStatus(UserAddStatus.GROUP_ADDED.getCode());
@@ -235,7 +235,7 @@ public class GroupManager extends BaseManager {
         }
 
         if (veirfyNeedUserList.size() > 0) {
-            for (int id : veirfyNeedUserList) {
+            for (Long id : veirfyNeedUserList) {
                 UserStatusDTO userStatusDTO = new UserStatusDTO();
                 userStatusDTO.setId(encode(id));
                 userStatusDTO.setStatus(UserAddStatus.WAIT_MEMBER.getCode());
@@ -248,7 +248,7 @@ public class GroupManager extends BaseManager {
         }
 
         //清除缓存
-        for (Integer memberId : memberIds) {
+        for (Long memberId : memberIds) {
             CacheUtil.delete(CacheUtil.USER_GROUP_CACHE_PREFIX + memberId);
         }
 
@@ -270,7 +270,7 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    private Result sendGroupNotificationMessageBySystem(String groupId, Map<String, Object> messageData, Integer operatorUserId, GroupOperationType groupOperationType) throws ServiceException {
+    private Result sendGroupNotificationMessageBySystem(String groupId, Map<String, Object> messageData, Long operatorUserId, GroupOperationType groupOperationType) throws ServiceException {
 
         CustomerGroupNtfMessage customerGroupNtfMessage = new CustomerGroupNtfMessage();
         customerGroupNtfMessage.setOperatorUserId(N3d.encode(operatorUserId));
@@ -309,7 +309,7 @@ public class GroupManager extends BaseManager {
      * @param type
      * @throws ServiceException
      */
-    private void sendGroupApplyMessage(Integer requesterId, List<Integer> operatorUserIdList, String targetGroupId, String targetGroupName, Integer status, Integer type) throws ServiceException {
+    private void sendGroupApplyMessage(Long requesterId, List<Long> operatorUserIdList, String targetGroupId, String targetGroupName, Integer status, Integer type) throws ServiceException {
 
         //构建消息内容
         CustomerGroupApplyMessage grpApplyMessage = new CustomerGroupApplyMessage();
@@ -342,17 +342,17 @@ public class GroupManager extends BaseManager {
      * @param groupReceiveType
      * @param groupReceiveStatusW
      */
-    private void batchSaveOrUpdateGroupReceiver(Groups groups, Integer requesterId, List<Integer> receiverIdList, List<Integer> operatorList, int groupReceiveType, int groupReceiveStatusW) throws ServiceException {
+    private void batchSaveOrUpdateGroupReceiver(Groups groups, Long requesterId, List<Long> receiverIdList, List<Long> operatorList, int groupReceiveType, int groupReceiveStatusW) throws ServiceException {
         transactionTemplate.execute(new TransactionCallback<Boolean>() {
             @Override
             public Boolean doInTransaction(TransactionStatus transactionStatus) {
                 long timestamp = System.currentTimeMillis();
                 //需要更新的ReceiverId
-                List<Integer> updateReceiverIdList = new ArrayList<>();
+                List<Long> updateReceiverIdList = new ArrayList<>();
 
                 List<GroupReceivers> createReceiverList = new ArrayList<>();
 
-                Integer selectRequesterId = null;
+                Long selectRequesterId = null;
                 if (GroupReceivers.GROUP_RECEIVE_TYPE_MANAGER.equals(groupReceiveType)) {
                     selectRequesterId = requesterId;
                 }
@@ -365,7 +365,7 @@ public class GroupManager extends BaseManager {
                     }
                 }
                 // 构建需要新创建的记录
-                for (Integer receiveId : receiverIdList) {
+                for (Long receiveId : receiverIdList) {
                     GroupReceivers gr = new GroupReceivers();
                     gr.setUserId(receiveId);
                     gr.setGroupId(groups.getId());
@@ -385,7 +385,7 @@ public class GroupManager extends BaseManager {
                             createReceiverList.add(gr);
                         } else {
                             if (!CollectionUtils.isEmpty(operatorList)) {
-                                for (Integer operatorId : operatorList) {
+                                for (Long operatorId : operatorList) {
                                     GroupReceivers grNew = new GroupReceivers();
                                     BeanUtils.copyProperties(gr, grNew);
                                     grNew.setUserId(operatorId);
@@ -397,7 +397,7 @@ public class GroupManager extends BaseManager {
                 }
 
                 //更新已经存在记录
-                Integer requesterIdForUpdate = null;
+                Long requesterIdForUpdate = null;
                 if (GroupReceivers.GROUP_RECEIVE_TYPE_MEMBER.equals(groupReceiveType)) {
                     requesterIdForUpdate = requesterId;
                 }
@@ -431,7 +431,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param memberIds
      */
-    public List<UserStatusDTO> addMember(Integer currentUserId, String groupId, Integer[] memberIds) throws ServiceException {
+    public List<UserStatusDTO> addMember(Long currentUserId, String groupId, Long[] memberIds) throws ServiceException {
 
         //返回结果对象
         List<UserStatusDTO> userStatusDTOList = new ArrayList<>();
@@ -458,8 +458,8 @@ public class GroupManager extends BaseManager {
         boolean isGroupVerifyOpened = Groups.CERTI_STATUS_OPENED.equals(groups.getCertiStatus()) ? true : false;
 
         //根据memberIds 查询每个成员用户信息是否开启了个人入群认证
-        List<Integer> verifyOpendUserIds = new ArrayList<>();
-        List<Integer> verifyClosedUserIds = new ArrayList<>();
+        List<Long> verifyOpendUserIds = new ArrayList<>();
+        List<Long> verifyClosedUserIds = new ArrayList<>();
         Example example1 = new Example(Users.class);
 
         example1.createCriteria().andIn("id", Arrays.asList(memberIds));
@@ -477,7 +477,7 @@ public class GroupManager extends BaseManager {
         //处理 verifyOpendUserIds 开启认证的用户，更新为待用户处理状态, 并批量发消息
         if (verifyOpendUserIds.size() > 0) {
             Integer type = GroupReceivers.GROUP_RECEIVE_TYPE_MEMBER;
-            for (Integer userId : verifyOpendUserIds) {
+            for (Long userId : verifyOpendUserIds) {
                 UserStatusDTO userStatusDTO = new UserStatusDTO();
                 userStatusDTO.setId(N3d.encode(userId));
                 userStatusDTO.setStatus(UserAddStatus.WAIT_MEMBER.getCode());
@@ -500,7 +500,7 @@ public class GroupManager extends BaseManager {
                         .andIn("role", ImmutableList.of(GroupRole.MANAGER, GroupRole.CREATOR));
                 //查询出所有管理者(Manager,Creator),
                 List<GroupMembers> groupMembersList = groupMembersService.getByExample(example2);
-                List<Integer> managerIds = new ArrayList<>();
+                List<Long> managerIds = new ArrayList<>();
                 if (!CollectionUtils.isEmpty(groupMembersList)) {
                     for (GroupMembers groupMembers1 : groupMembersList) {
                         managerIds.add(groupMembers1.getMemberId());
@@ -508,7 +508,7 @@ public class GroupManager extends BaseManager {
                 }
 
                 Integer type = GroupReceivers.GROUP_RECEIVE_TYPE_MANAGER;
-                for (Integer userId : verifyClosedUserIds) {
+                for (Long userId : verifyClosedUserIds) {
                     UserStatusDTO userStatusDTO = new UserStatusDTO();
                     userStatusDTO.setId(N3d.encode(userId));
                     userStatusDTO.setStatus(UserAddStatus.WAIT_MANAGER.getCode());
@@ -521,7 +521,7 @@ public class GroupManager extends BaseManager {
 
             } else {
                 //如果没有开启群验证或者有管理员角色 !isGroupVerifyOpened || hasManagerRole --> 直接加群
-                for (Integer userId : verifyClosedUserIds) {
+                for (Long userId : verifyClosedUserIds) {
                     UserStatusDTO userStatusDTO = new UserStatusDTO();
                     userStatusDTO.setId(N3d.encode(userId));
                     userStatusDTO.setStatus(UserAddStatus.GROUP_ADDED.getCode());
@@ -542,7 +542,7 @@ public class GroupManager extends BaseManager {
      * @param userIds
      * @param currentUserId
      */
-    private void addMember0(String groupId, List<Integer> userIds, Integer currentUserId) throws ServiceException {
+    private void addMember0(String groupId, List<Long> userIds, Long currentUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Groups groups = groupsService.getByPrimaryKey(groupId);
@@ -577,7 +577,7 @@ public class GroupManager extends BaseManager {
         rongCloudClient.joinGroup(MiscUtils.encodeIds(userIds), groups.getEasemobGroupId(), groups.getName());
 
         //清除相关缓存
-        for (Integer userId : userIds) {
+        for (Long userId : userIds) {
             CacheUtil.delete(CacheUtil.USER_GROUP_CACHE_PREFIX + userId);
         }
         CacheUtil.delete(CacheUtil.GROUP_CACHE_PREFIX + groupId);
@@ -620,7 +620,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param encodedGroupId
      */
-    public void joinGroup(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
+    public void joinGroup(Long currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -669,7 +669,7 @@ public class GroupManager extends BaseManager {
         CacheUtil.delete(CacheUtil.GROUP_MEMBERS_CACHE_PREFIX + groupId);
     }
 
-    private void doJoinGroup0(Integer currentUserId, String groupId, long timestamp, Groups groups) {
+    private void doJoinGroup0(Long currentUserId, String groupId, long timestamp, Groups groups) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -692,7 +692,7 @@ public class GroupManager extends BaseManager {
      * @param timestamp
      * @param creatorId
      */
-    private void doBatchSaveOrUpdateGroupMemberInTransaction(String groupId, List<Integer> memberIdList, long timestamp, Integer creatorId) {
+    private void doBatchSaveOrUpdateGroupMemberInTransaction(String groupId, List<Long> memberIdList, long timestamp, Long creatorId) {
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -710,7 +710,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param memberProtection 成员保护模式: 0 关闭、1 开启
      */
-    public void setMemberProtection(Integer currentUserId, String groupId, Integer memberProtection) throws ServiceException {
+    public void setMemberProtection(Long currentUserId, String groupId, Integer memberProtection) throws ServiceException {
 
         String operation = "openMemberProtection";
         if (memberProtection == 0) {
@@ -736,18 +736,18 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    private Result sendCustomerGroupNotificationMessage(Integer operatorId, String targetId, String operation) throws ServiceException {
+    private Result sendCustomerGroupNotificationMessage(Long operatorId, String targetId, String operation) throws ServiceException {
 
         return rongCloudClient.sendCustomerGroupNtfMessage(N3d.encode(operatorId), targetId, operation);
     }
 
 
-    private Result sendCustomerConNtfMessage(Integer operatorId, String targetId, String operation) throws ServiceException {
+    private Result sendCustomerConNtfMessage(Long operatorId, String targetId, String operation) throws ServiceException {
 
         return rongCloudClient.sendCustomerConNtfMessage(N3d.encode(operatorId), targetId, operation);
     }
 
-    private Result sendCustomerClearGroupMessage(Integer operatorId, String targetId, String operation, Long clearTimestamp) throws ServiceException {
+    private Result sendCustomerClearGroupMessage(Long operatorId, String targetId, String operation, Long clearTimestamp) throws ServiceException {
 
         return rongCloudClient.sendCustomerClearGroupMessage(N3d.encode(operatorId), targetId, operation, clearTimestamp);
     }
@@ -761,7 +761,7 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public List<GroupExitedLists> getExitedList(Integer currentUserId, Integer groupId) throws ServiceException {
+    public List<GroupExitedLists> getExitedList(Long currentUserId, Long groupId) throws ServiceException {
 
         Example example = new Example(GroupMembers.class);
 
@@ -792,7 +792,7 @@ public class GroupManager extends BaseManager {
      * @return
      * @throws ServiceException
      */
-    public GroupMembers getMemberInfo(String groupId, Integer memberId) throws ServiceException {
+    public GroupMembers getMemberInfo(String groupId, Long memberId) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, memberId);
 
@@ -815,7 +815,7 @@ public class GroupManager extends BaseManager {
      * @param alipay
      * @param memberDesc
      */
-    public void setMemberInfo(String groupId, Integer memberId, String groupNickname, String region, String phone, String weChat, String alipay, String[] memberDesc) throws ServiceException {
+    public void setMemberInfo(String groupId, Long memberId, String groupNickname, String region, String phone, String weChat, String alipay, String[] memberDesc) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, memberId);
 
@@ -850,7 +850,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param clearStatus   清理选项 0-》关闭、 3-》清理 3 天前、 7-》清理 7 天前、 36-》清理 36 小时前
      */
-    public void setRegularClear(Integer currentUserId, String groupId, Integer clearStatus) throws ServiceException {
+    public void setRegularClear(Long currentUserId, String groupId, Integer clearStatus) throws ServiceException {
 
         String operation = "openRegularClear";
 
@@ -893,7 +893,7 @@ public class GroupManager extends BaseManager {
      * @param muteStatus    禁言状态：0 关闭 1 开启
      * @param userIds       可发言用户，不传全员禁言，仅群组和管理员可发言
      */
-    public void setMuteAll(Integer currentUserId, String groupId, Integer muteStatus, Integer[] userIds) throws ServiceException {
+    public void setMuteAll(Long currentUserId, String groupId, Integer muteStatus, Long[] userIds) throws ServiceException {
 
         String encodeGroupId = groupId;
 
@@ -925,7 +925,7 @@ public class GroupManager extends BaseManager {
                     .andIn("role", ImmutableList.of(GroupRole.CREATOR.getCode(), GroupRole.MANAGER.getCode()));
             List<GroupMembers> groupMembersList = groupMembersService.getByExample(example);
 
-            List<Integer> whiteUserIdList = new ArrayList<>();
+            List<Long> whiteUserIdList = new ArrayList<>();
             if (!CollectionUtils.isEmpty(groupMembersList)) {
                 for (GroupMembers groupMembers : groupMembersList) {
                     whiteUserIdList.add(groupMembers.getMemberId());
@@ -934,7 +934,7 @@ public class GroupManager extends BaseManager {
             }
 
             if (ArrayUtils.isNotEmpty(userIds)) {
-                for (Integer id : userIds) {
+                for (Long id : userIds) {
                     whiteUserIdList.add(id);
                 }
             }
@@ -982,7 +982,7 @@ public class GroupManager extends BaseManager {
      *
      * @param currentUserId
      */
-    public void clearNotice(Integer currentUserId) {
+    public void clearNotice(Long currentUserId) {
 
         Example example = new Example(GroupReceivers.class);
         example.createCriteria().andEqualTo("userId", currentUserId);
@@ -996,7 +996,7 @@ public class GroupManager extends BaseManager {
      * @param currentUserId
      * @return
      */
-    public List<GroupReceivers> getNoticeInfo(Integer currentUserId) {
+    public List<GroupReceivers> getNoticeInfo(Long currentUserId) {
 
         return groupReceiversService.getGroupReceiversWithIncludes(currentUserId);
 
@@ -1009,7 +1009,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param certiStatus   认证状态： 0 开启(需要认证)、1 关闭（不需要认证）
      */
-    public void setCertification(Integer currentUserId, String groupId, Integer certiStatus) throws ServiceException {
+    public void setCertification(Long currentUserId, String groupId, Integer certiStatus) throws ServiceException {
 
         GroupMembers groupMembers = groupMembersService.getGroupMember(groupId, currentUserId);
 
@@ -1030,7 +1030,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    public List<GroupMembers> getGroupMembers(Integer currentUserId, String groupId) throws ServiceException {
+    public List<GroupMembers> getGroupMembers(Long currentUserId, String groupId) throws ServiceException {
 
         String membersJson = CacheUtil.get(CacheUtil.GROUP_MEMBERS_CACHE_PREFIX + groupId);
         if (!StringUtils.isEmpty(membersJson)) {
@@ -1057,7 +1057,7 @@ public class GroupManager extends BaseManager {
 
     }
 
-    private boolean isInGroupMember(List<GroupMembers> groupMembersList, Integer userId) {
+    private boolean isInGroupMember(List<GroupMembers> groupMembersList, Long userId) {
         if (groupMembersList != null) {
             for (GroupMembers groupMembers : groupMembersList) {
                 if (groupMembers.getMemberId().equals(userId)) {
@@ -1099,7 +1099,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param displayName
      */
-    public void setDisPlayName(Integer currentUserId, String groupId, String displayName) throws ServiceException {
+    public void setDisPlayName(Long currentUserId, String groupId, String displayName) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         GroupMembers groupMembers = new GroupMembers();
@@ -1128,7 +1128,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param portraitUri
      */
-    public void setGroupPortraitUri(Integer currentUserId, String groupId, String portraitUri) throws ServiceException {
+    public void setGroupPortraitUri(Long currentUserId, String groupId, String portraitUri) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         Groups groups = new Groups();
         groups.setPortraitUri(portraitUri);
@@ -1176,7 +1176,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param bulletin
      */
-    public void setBulletin(Integer currentUserId, String groupId, String bulletin) throws ServiceException {
+    public void setBulletin(Long currentUserId, String groupId, String bulletin) throws ServiceException {
         long timestamp = System.currentTimeMillis();
         GroupBulletins groupBulletins = new GroupBulletins();
         groupBulletins.setGroupId(groupId);
@@ -1214,7 +1214,7 @@ public class GroupManager extends BaseManager {
      * @param currentUserId
      * @param groupId
      */
-    public void fav(Integer currentUserId, String groupId) throws ServiceException {
+    public void fav(Long currentUserId, String groupId) throws ServiceException {
 
         GroupFavs groupFavs = new GroupFavs();
         groupFavs.setUserId(currentUserId);
@@ -1249,7 +1249,7 @@ public class GroupManager extends BaseManager {
      * @param name
      * @param encodedGroupId
      */
-    public void rename(Integer currentUserId, String groupId, String name, String encodedGroupId) throws ServiceException {
+    public void rename(Long currentUserId, String groupId, String name, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1320,7 +1320,7 @@ public class GroupManager extends BaseManager {
      * @param memberIds
      * @param encodedMemberIds
      */
-    public void batchRemoveManager(Integer currentUserId, String groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
+    public void batchRemoveManager(Long currentUserId, String groupId, Long[] memberIds, String[] encodedMemberIds) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1366,12 +1366,12 @@ public class GroupManager extends BaseManager {
      * @param groupOperationType
      * @throws ServiceException
      */
-    private void setGroupMemberRole(String groupId, Integer[] memberIds, GroupRole role, Integer currentUserId, GroupOperationType groupOperationType) throws ServiceException {
+    private void setGroupMemberRole(String groupId, Long[] memberIds, GroupRole role, Long currentUserId, GroupOperationType groupOperationType) throws ServiceException {
         long timestamp = System.currentTimeMillis();
 
-        List<Integer> memberIdList = CollectionUtils.arrayToList(memberIds);
+        List<Long> memberIdList = CollectionUtils.arrayToList(memberIds);
 
-        List<Integer> memberIdListWithMe = new ArrayList<>(memberIdList);
+        List<Long> memberIdListWithMe = new ArrayList<Long>(memberIdList);
         memberIdListWithMe.add(currentUserId);
 
         Example example = new Example(GroupMembers.class);
@@ -1448,7 +1448,7 @@ public class GroupManager extends BaseManager {
      * @param encodedMemberIds
      * @throws ServiceException
      */
-    public void batchSetManager(Integer currentUserId, String groupId, Integer[] memberIds, String[] encodedMemberIds) throws ServiceException {
+    public void batchSetManager(Long currentUserId, String groupId, Long[] memberIds, String[] encodedMemberIds) throws ServiceException {
         long timestamp = System.currentTimeMillis();
 
         setGroupMemberRole(groupId, memberIds, GroupRole.MANAGER, currentUserId, GroupOperationType.SET_MANAGER);
@@ -1500,7 +1500,7 @@ public class GroupManager extends BaseManager {
      * @param encodedUserId
      * @throws ServiceException
      */
-    public void transfer(Integer currentUserId, String groupId, Integer userId, String encodedUserId) throws ServiceException {
+    public void transfer(Long currentUserId, String groupId, Long userId, String encodedUserId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         if (userId.equals(currentUserId)) {
@@ -1592,7 +1592,7 @@ public class GroupManager extends BaseManager {
      * @param userId
      * @param timestamp
      */
-    public void transferGroupCreator0(Integer currentUserId, String groupId, Integer userId, long timestamp) {
+    public void transferGroupCreator0(Long currentUserId, String groupId, Long userId, long timestamp) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -1637,7 +1637,7 @@ public class GroupManager extends BaseManager {
      * @param groupId
      * @param encodedGroupId
      */
-    public void dismiss(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
+    public void dismiss(Long currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
 
@@ -1697,7 +1697,7 @@ public class GroupManager extends BaseManager {
                     example3.createCriteria().andEqualTo("groupId", groupId);
                     groupReceiversService.updateByExampleSelective(groupReceivers, example3);
 
-                    List<Integer> userIdList = new ArrayList<>();
+                    List<Long> userIdList = new ArrayList<>();
 
                     for (GroupReceivers groupReceivers1 : groupReceiversList) {
                         userIdList.add(groupReceivers1.getUserId());
@@ -1714,7 +1714,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    public void dismiss0(Integer currentUserId, String groupId, long timestamp) throws ServiceException {
+    public void dismiss0(Long currentUserId, String groupId, long timestamp) throws ServiceException {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 
             @Override
@@ -1779,7 +1779,7 @@ public class GroupManager extends BaseManager {
      * @param encodedGroupId
      * @throws ServiceException
      */
-    public String quitGroup(Integer currentUserId, String groupId, String encodedGroupId) throws ServiceException {
+    public String quitGroup(Long currentUserId, String groupId, String encodedGroupId) throws ServiceException {
 
         long timestamp = System.currentTimeMillis();
         Users currentUser = usersService.getByPrimaryKey(currentUserId);
@@ -1797,7 +1797,7 @@ public class GroupManager extends BaseManager {
             throw new ServiceException(ErrorCode.NOT_GROUP_MEMBER_3);
         }
 
-        Integer newCreatorId = null;
+        Long newCreatorId = null;
         if (groups.getCreatorId().equals(currentUserId) && groups.getMemberCount() > 1) {
             //如果是群主退出，选择出新的群主
             for (GroupMembers groupMembers : groupMembersList) {
@@ -1853,7 +1853,7 @@ public class GroupManager extends BaseManager {
         return resultMessage;
     }
 
-    private String quitGroup0(Integer currentUserId, String groupId, long timestamp, Groups groups, Integer newCreatorId) {
+    private String quitGroup0(Long currentUserId, String groupId, long timestamp, Groups groups, Long newCreatorId) {
         return transactionTemplate.execute(new TransactionCallback<String>() {
             @Override
             public String doInTransaction(TransactionStatus transactionStatus) {
@@ -1927,7 +1927,7 @@ public class GroupManager extends BaseManager {
      * @param memberIds
      * @param encodeMemberIds
      */
-    public void kickMember(Integer currentUserId, String groupId, String encodeGroupId, Integer[] memberIds, String[] encodeMemberIds) throws ServiceException {
+    public void kickMember(Long currentUserId, String groupId, String encodeGroupId, Long[] memberIds, String[] encodeMemberIds) throws ServiceException {
         log.info("kickMember groupId:" + groupId + " memberIds.len:" + memberIds.length);
         long timestamp = System.currentTimeMillis();
         if (ArrayUtils.contains(memberIds, currentUserId)) {
@@ -1967,13 +1967,13 @@ public class GroupManager extends BaseManager {
             throw new ServiceException(ErrorCode.GROUP_MEMBER_EMPTY);
         }
 
-        List<Integer> dbMemberIdList = new ArrayList<>();
+        List<Long> dbMemberIdList = new ArrayList<>();
         for (GroupMembers groupMembers : groupMembersList) {
             dbMemberIdList.add(groupMembers.getMemberId());
         }
 
-        List<Integer> memberIdList = new ArrayList<>();
-        for (Integer memberId : memberIds) {
+        List<Long> memberIdList = new ArrayList<>();
+        for (Long memberId : memberIds) {
             if (memberId == null) {
                 throw new ServiceException(ErrorCode.EMPTY_MEMBERID);
             }
@@ -2021,7 +2021,7 @@ public class GroupManager extends BaseManager {
         }
 
         //清除相关缓存
-        for (Integer memberId : memberIds) {
+        for (Long memberId : memberIds) {
             CacheUtil.delete(CacheUtil.USER_GROUP_CACHE_PREFIX + memberId);
         }
         CacheUtil.delete(CacheUtil.GROUP_CACHE_PREFIX + groupId);
@@ -2047,7 +2047,7 @@ public class GroupManager extends BaseManager {
     }
 
 
-    private void kickMember0(String groupId, Integer[] memberIds, long timestamp, Groups groups) {
+    private void kickMember0(String groupId, Long[] memberIds, long timestamp, Groups groups) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -2074,7 +2074,7 @@ public class GroupManager extends BaseManager {
      * @param currentUserId
      * @param groupId
      */
-    public void deletefav(Integer currentUserId, String groupId) {
+    public void deletefav(Long currentUserId, String groupId) {
         groupFavsService.deleteByGroupIdAndUserId(groupId, ImmutableList.of(currentUserId));
     }
 
@@ -2087,7 +2087,7 @@ public class GroupManager extends BaseManager {
      * @param portraitUri
      * @return
      */
-    public GroupAddStatusDTO copyGroup(Integer currentUserId, String groupId, String groupName, String portraitUri) throws ServiceException {
+    public GroupAddStatusDTO copyGroup(Long currentUserId, String groupId, String groupName, String portraitUri) throws ServiceException {
 
         List<UserStatusDTO> userStatusDTOList = new ArrayList<>();
 
@@ -2126,7 +2126,7 @@ public class GroupManager extends BaseManager {
         example.createCriteria().andEqualTo("groupId", groupId);
         List<GroupMembers> groupMembersList = groupMembersService.getByExample(example);
 
-        List<Integer> memberIds = new ArrayList<>();
+        List<Long> memberIds = new ArrayList<>();
         List<String> encodedMemberIds = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(groupMembersList)) {
@@ -2139,8 +2139,8 @@ public class GroupManager extends BaseManager {
             throw new ServiceException(ErrorCode.SERVER_ERROR);
         }
 
-        List<Integer> joinUserIds = new ArrayList<>();
-        for (Integer memberId : memberIds) {
+        List<Long> joinUserIds = new ArrayList<>();
+        for (Long memberId : memberIds) {
             if (!memberId.equals(currentUserId)) {
                 joinUserIds.add(memberId);
             }
@@ -2164,9 +2164,9 @@ public class GroupManager extends BaseManager {
         }
 
         //开启了加入群验证，不允许直接加入群聊的用户
-        List<Integer> veirfyNeedUserList = new ArrayList<>();
+        List<Long> veirfyNeedUserList = new ArrayList<>();
         //未开启加入群验证，允许直接加入群聊的用户
-        List<Integer> verifyNoNeedUserList = new ArrayList<>();
+        List<Long> verifyNoNeedUserList = new ArrayList<>();
 
         //查询所有成员的用户区分是否开启了入群验证
         List<Users> usersList = usersService.getUsers(joinUserIds);
@@ -2192,11 +2192,11 @@ public class GroupManager extends BaseManager {
         newGroups.setUpdatedAt(newGroups.getCreatedAt());
         groupsService.saveSelective(newGroups);
 
-        List<Integer> megerUserIdList = new ArrayList<>(verifyNoNeedUserList);
+        List<Long> megerUserIdList = new ArrayList<>(verifyNoNeedUserList);
         megerUserIdList.add(currentUserId);
 
         //构建返回结果
-        for (int id : megerUserIdList) {
+        for (Long id : megerUserIdList) {
             UserStatusDTO userStatusDTO = new UserStatusDTO();
             userStatusDTO.setId(N3d.encode(id));
             userStatusDTO.setStatus(UserAddStatus.GROUP_ADDED.getCode());
@@ -2241,7 +2241,7 @@ public class GroupManager extends BaseManager {
         }
 
         if (veirfyNeedUserList.size() > 0) {
-            for (int id : veirfyNeedUserList) {
+            for (Long id : veirfyNeedUserList) {
                 UserStatusDTO userStatusDTO = new UserStatusDTO();
                 userStatusDTO.setId(encode(id));
                 userStatusDTO.setStatus(UserAddStatus.WAIT_MEMBER.getCode());
@@ -2252,7 +2252,7 @@ public class GroupManager extends BaseManager {
         }
 
         //清除缓存
-        for (Integer memberId : memberIds) {
+        for (Long memberId : memberIds) {
             CacheUtil.delete(CacheUtil.USER_GROUP_CACHE_PREFIX + memberId);
         }
         //更新复制时间
@@ -2276,7 +2276,7 @@ public class GroupManager extends BaseManager {
      * @param receiverId
      * @param status        是否同意 0 忽略、 1 同意
      */
-    public void agree(Integer currentUserId, String groupId, Integer receiverId, String status) throws ServiceException {
+    public void agree(Long currentUserId, String groupId, Long receiverId, String status) throws ServiceException {
         //是否为 被邀请者同意或忽略
         boolean isReceiverOpt = currentUserId.equals(receiverId);
         //是否同意
@@ -2333,7 +2333,7 @@ public class GroupManager extends BaseManager {
 
             List<GroupMembers> groupMembersList = groupMembersService.getByExample(groupMemberExample);
 
-            List<Integer> memberIds = new ArrayList<>();
+            List<Long> memberIds = new ArrayList<>();
             if (groupMembersList != null) {
                 for (GroupMembers gm : groupMembersList) {
                     memberIds.add(gm.getMemberId());

@@ -24,7 +24,7 @@ public class DataVersionsServiceTest {
     public void createDataVersion() {
 
         DataVersions dataVersions = new DataVersions();
-        dataVersions.setUserId(1);
+        dataVersions.setUserId(1l);
         dataVersionsService.saveSelective(dataVersions);
     }
 }

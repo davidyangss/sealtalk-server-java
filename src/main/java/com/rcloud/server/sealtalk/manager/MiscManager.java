@@ -61,7 +61,7 @@ public class MiscManager extends BaseManager {
      * @param pushContent
      * @param encodedTargetId
      */
-    public void sendMessage(Integer currentUserId, String conversationType, Integer targetId, String objectName, String content, String pushContent, String encodedTargetId) throws ServiceException {
+    public void sendMessage(Long currentUserId, String conversationType, Long targetId, String objectName, String content, String pushContent, String encodedTargetId) throws ServiceException {
         if (Constants.CONVERSATION_TYPE_PRIVATE.equals(conversationType)) {
             //如果会话类型是单聊
             Example example = new Example(Friendships.class);
@@ -116,7 +116,7 @@ public class MiscManager extends BaseManager {
      * @param conversationType
      * @param noticeStatus
      */
-    public void setScreenCapture(Integer currentUserId, Integer targetId, Integer conversationType, Integer noticeStatus) throws ServiceException {
+    public void setScreenCapture(Long currentUserId, Long targetId, Integer conversationType, Integer noticeStatus) throws ServiceException {
 
         String operateId = String.valueOf(targetId);
         String statusContent = noticeStatus == 0 ? "closeScreenNtf" : "openScreenNtf";
@@ -166,7 +166,7 @@ public class MiscManager extends BaseManager {
      * @param operation
      */
 
-    private void sendScreenMsg0(Integer currentUserId, Integer targetId, Integer conversationType, String operation) throws ServiceException {
+    private void sendScreenMsg0(Long currentUserId, Long targetId, Integer conversationType, String operation) throws ServiceException {
 
         if (ConversationType.PRIVATE.getCode().equals(conversationType)) {
             String encodeUserId = N3d.encode(currentUserId);
@@ -199,7 +199,7 @@ public class MiscManager extends BaseManager {
      * @param conversationType
      * @return
      */
-    public ScreenStatuses getScreenCapture(Integer currentUserId, Integer targetId, Integer conversationType) throws ServiceException {
+    public ScreenStatuses getScreenCapture(Long currentUserId, Long targetId, Integer conversationType) throws ServiceException {
         String operateId = String.valueOf(targetId);
         if (conversationType == 1) {
             operateId = currentUserId < targetId ? currentUserId + "_" + targetId : targetId + "_" + currentUserId;
@@ -219,7 +219,7 @@ public class MiscManager extends BaseManager {
      * @param targetId
      * @param conversationType
      */
-    public void sendScreenCaptureMsg(Integer currentUserId, Integer targetId, Integer conversationType) throws ServiceException {
+    public void sendScreenCaptureMsg(Long currentUserId, Long targetId, Integer conversationType) throws ServiceException {
         sendScreenMsg0(currentUserId, targetId, conversationType, "sendScreenNtf");
     }
 }

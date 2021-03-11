@@ -13,7 +13,7 @@ public class GroupFavs implements Serializable {
     private Integer id;
 
     @Column(name = "userId")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "groupId")
     private String groupId;
@@ -46,14 +46,14 @@ public class GroupFavs implements Serializable {
     /**
      * @return userId
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     /**
      * @param userId
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

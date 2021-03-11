@@ -107,7 +107,7 @@ public class JacksonUtil {
         try {
             // bean
             Users u = new Users();
-            u.setId(123);
+            u.setId(123L);
             u.setNickname("张三");
             u.setCreatedAt(new Date());
             String jsonStr = toJson(u);
@@ -119,7 +119,7 @@ public class JacksonUtil {
             List<Users> list = new ArrayList<Users>();
             for (int i = 0; i < 2; i++) {
                 u = new Users();
-                u.setId(10 + i);
+                u.setId(10l + i);
                 u.setNickname("tom" + i);
                 list.add(u);
             }

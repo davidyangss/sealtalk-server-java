@@ -69,7 +69,7 @@ public class GroupExitedListsService extends AbstractBaseService<GroupExitedList
      * @param groupId
      * @param quitUserIds
      */
-    public void deleteGroupExitedListItems(String groupId, List<Integer> quitUserIds) {
+    public void deleteGroupExitedListItems(String groupId, List<Long> quitUserIds) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notEmpty(quitUserIds,"quitUserIds is null");
 

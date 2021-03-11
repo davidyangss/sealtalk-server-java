@@ -20,7 +20,7 @@ public class GroupMembers implements Serializable {
     private String groupId;
 
     @Column(name = "memberId")
-    private Integer memberId;
+    private Long memberId;
 
     @Column(name = "displayName")
     private String displayName;
@@ -80,11 +80,11 @@ public class GroupMembers implements Serializable {
         this.groupId = groupId;
     }
 
-    public Integer getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(Integer memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 

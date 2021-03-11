@@ -9,9 +9,9 @@ import java.util.List;
 public interface FriendshipsMapper extends Mapper<Friendships> {
 
 
-    List<Friendships> getFriendShipListWithUsers(@Param("userId") Integer userId);
+    List<Friendships> getFriendShipListWithUsers(@Param("userId") Long userId);
 
-    Friendships getFriendShipWithUsers(@Param("userId") Integer userId,@Param("friendId") Integer friendId,@Param("status") Integer status);
+    Friendships getFriendShipWithUsers(@Param("userId") Long userId,@Param("friendId") Long friendId,@Param("status") Integer status);
 
-    List<Friendships> selectFriendShipListWithUsersAndVersion(@Param("userId") Integer currentUserId, @Param("version") Long version);
+    List<Friendships> selectFriendShipListWithUsersAndVersion(@Param("userId") Long currentUserId, @Param("version") Long version);
 }

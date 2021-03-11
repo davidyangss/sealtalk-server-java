@@ -24,7 +24,7 @@ public class GroupMembersServiceTest {
 
     @Test
     public void queryGroupMembersWithGroupByMemberId() {
-        int memberId = 1;
+        Long memberId = 1l;
         List<GroupMembers> groupMembersList = groupMembersService.queryGroupMembersWithGroupByMemberId(memberId);
         System.out.println(groupMembersList);
     }

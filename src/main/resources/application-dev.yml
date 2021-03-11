@@ -136,9 +136,9 @@ sealtalk-config:
   server_port: 5381
   db_name: sealtalk
   db_user: root
-  db_password: root
+  db_password: 12345678
   db_host: 127.0.0.1
-  db_port: 7306
+  db_port: 3306
 
 
 easemob.config:

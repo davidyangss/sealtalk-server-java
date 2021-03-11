@@ -30,7 +30,7 @@ public class Users implements Serializable {
 
     @Id
     @GeneratedValue(generator = "JDBC")
-    private Integer id;
+    private Long id;
 
     private String region;
 
@@ -106,14 +106,14 @@ public class Users implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

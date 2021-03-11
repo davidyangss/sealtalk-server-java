@@ -18,7 +18,7 @@ import java.util.List;
  * @Copyright (c) 2020, rongcloud.cn All Rights Reserved
  */
 @Service
-public class GroupReceiversService extends AbstractBaseService<GroupReceivers, Integer> {
+public class GroupReceiversService extends AbstractBaseService<GroupReceivers, Long> {
 
     @Resource
     private GroupReceiversMapper mapper;
@@ -34,7 +34,7 @@ public class GroupReceiversService extends AbstractBaseService<GroupReceivers, I
      * @param groupId
      * @param memberIds
      */
-    public void deleteByMemberIds(String groupId, Integer[] memberIds) {
+    public void deleteByMemberIds(String groupId, Long[] memberIds) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notEmpty(memberIds,"memberIds is empty");
 
@@ -42,7 +42,7 @@ public class GroupReceiversService extends AbstractBaseService<GroupReceivers, I
         example.createCriteria().andEqualTo("groupId", groupId);
 
         Example.Criteria criteria2 = example.createCriteria();
-        for (Integer memberId : memberIds) {
+        for (Long memberId : memberIds) {
             criteria2.orEqualTo("userId", memberId);
         }
         example.and(criteria2);
@@ -57,7 +57,7 @@ public class GroupReceiversService extends AbstractBaseService<GroupReceivers, I
      * @param groupId
      * @param userId
      */
-    public void deleteGroupReverive(String groupId, Integer userId) {
+    public void deleteGroupReverive(String groupId, Long userId) {
         Assert.notNull(groupId,"groupId is null");
         Assert.notNull(userId,"userId is null");
 
@@ -68,13 +68,13 @@ public class GroupReceiversService extends AbstractBaseService<GroupReceivers, I
 
     }
 
-    public List<GroupReceivers> getReceiversWithList(String groupId,Integer requesterId,List<Integer> receiverIdList, List<Integer> operatorList, Integer groupReceiveType){
+    public List<GroupReceivers> getReceiversWithList(String groupId,Long requesterId,List<Long> receiverIdList, List<Long> operatorList, Integer groupReceiveType){
 
         return mapper.selectReceiversWithList(groupId,requesterId,receiverIdList,operatorList,groupReceiveType);
     }
 
 
-    public int updateReceiversWithList(Integer requesterIdForUpdate,Long timestamp,Integer status, String groupId,Integer requesterId,List<Integer> receiverIdList, List<Integer> operatorList, Integer groupReceiveType){
+    public int updateReceiversWithList(Long requesterIdForUpdate,Long timestamp,Integer status, String groupId,Long requesterId,List<Long> receiverIdList, List<Long> operatorList, Integer groupReceiveType){
 
         Assert.notEmpty(receiverIdList,"receiverIdList is empty");
         Assert.notEmpty(operatorList,"operatorList is empty");
@@ -99,7 +99,7 @@ public class GroupReceiversService extends AbstractBaseService<GroupReceivers, I
         }
     }
 
-    public List<GroupReceivers> getGroupReceiversWithIncludes(Integer currentUserId) {
+    public List<GroupReceivers> getGroupReceiversWithIncludes(Long currentUserId) {
         return mapper.selectGroupReceiversWithIncludes(currentUserId);
     }
 }

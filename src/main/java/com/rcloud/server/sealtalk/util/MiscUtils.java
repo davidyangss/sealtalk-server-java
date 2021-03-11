@@ -185,7 +185,7 @@ public class MiscUtils {
             ObjectNode objectNode = (ObjectNode) targetNode;
             if (objectNode.get(elements[elements.length - 1]) != null) {
                 if (!objectNode.get(elements[elements.length - 1]).isNull()) {
-                    objectNode.put(elements[elements.length - 1], N3d.encode(objectNode.get(elements[elements.length - 1]).asInt()));
+                    objectNode.put(elements[elements.length - 1], N3d.encode(objectNode.get(elements[elements.length - 1]).asLong()));
                 }
             }
 
@@ -198,13 +198,13 @@ public class MiscUtils {
         List<Users> usersList = new ArrayList<>(3);
         for (int i = 0; i < 3; i++) {
             Users users = new Users();
-            users.setId(12 + i);
+            users.setId(12L + i);
             users.setNickname("test22" + i);
             users.setPhone("18810183283");
             users.setDeletedAt(new Date());
             Groups groups = new Groups();
             groups.setId(null);
-            groups.setCreatorId(33 + i);
+            groups.setCreatorId(33L+ i);
             groups.setCreatedAt(new Date());
             groups.setName("gnameTest");
             users.setGroups(groups);
@@ -265,9 +265,9 @@ public class MiscUtils {
         return null;
     }
 
-    public static Integer[] decodeIds(String[] ids) throws ServiceException {
+    public static Long[] decodeIds(String[] ids) throws ServiceException {
         if(ArrayUtils.isNotEmpty(ids)){
-            Integer[] result = new Integer[ids.length];
+            Long[] result = new Long[ids.length];
 
             for(int i=0;i<ids.length;i++){
                 result[i] = N3d.decode(ids[i]);
@@ -278,7 +278,7 @@ public class MiscUtils {
         return null;
     }
 
-    public static String[] encodeIds(List<Integer> ids) throws ServiceException {
+    public static String[] encodeIds(List<Long> ids) throws ServiceException {
         if(!CollectionUtils.isEmpty(ids)){
             String[] result = new String[ids.size()];
 

@@ -28,11 +28,11 @@ public class GroupFavsService extends AbstractBaseService<GroupFavs, Integer> {
         return mapper;
     }
 
-    public List<GroupFavs> queryGroupFavsWithGroupByUserId(Integer userId, Integer limit, Integer offset) {
+    public List<GroupFavs> queryGroupFavsWithGroupByUserId(Long userId, Integer limit, Integer offset) {
         return mapper.queryGroupFavsWithGroupByUserId(userId, limit, offset);
     }
 
-    public void deleteByGroupIdAndUserId(String groupId, List<Integer> userIdList) {
+    public void deleteByGroupIdAndUserId(String groupId, List<Long> userIdList) {
         Assert.notNull(groupId,"groupId is null");
 
         Example example = new Example(GroupFavs.class);
@@ -46,7 +46,7 @@ public class GroupFavsService extends AbstractBaseService<GroupFavs, Integer> {
     }
 
 
-    public Integer queryCountGroupFavs(Integer userId){
+    public Integer queryCountGroupFavs(Long userId){
         return mapper.queryCountGroupFavsWithGroupByUserId(userId);
     }
 }
