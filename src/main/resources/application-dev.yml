@@ -11,9 +11,8 @@ server:
       force-response: true
 
 spring:
-
   flyway:
-    enabled: true
+    enabled: false
     # 禁止清理数据库表
     clean-disabled: true
     baseline-description: baselines
@@ -134,11 +133,11 @@ sealtalk-config:
   cors_hosts:  rtc-turn4-hsb.easemob.com
   exclude_url: /misc/demo_square,/misc/latest_update, /user/verify_code_yp_t,/misc/client_version,/misc/mobile_version,/user/login,/user/register,/user/reset_password, /user/send_code, /user/send_code_yp,/user/verify_code, /user/verify_code_yp, /user/delete, /user/get_sms_img_code,/user/check_username_available,/user/check_phone_available,/user/regionlist,/ping
   server_port: 5381
-  db_name: sealtalk
+  db_name: sealtalk2
   db_user: root
-  db_password: 12345678
+  db_password: root
   db_host: 127.0.0.1
-  db_port: 3306
+  db_port: 7306
 
 
 easemob.config:
