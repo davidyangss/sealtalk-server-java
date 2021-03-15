@@ -33,6 +33,19 @@
     <tk.mapper.version>4.1.5</tk.mapper.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>easemob-releases</id>
+      <name>Easemob Maven Release</name>
+      <url>http://hk.nexus.op.easemob.com/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>easemob-snapshots</id>
+      <name>Easemob Maven Snapshot</name>
+      <url>http://hk.nexus.op.easemob.com/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
