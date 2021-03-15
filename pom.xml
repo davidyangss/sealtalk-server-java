@@ -31,6 +31,10 @@
     <bouncycastle.version>1.65.01</bouncycastle.version>
     <mybatis.generator.plugin.version>1.2.12</mybatis.generator.plugin.version>
     <tk.mapper.version>4.1.5</tk.mapper.version>
+
+    <spring-cloud-consul.version>2.2.3.RELEASE</spring-cloud-consul.version>
+    <spring-cloud-config.version>2.2.3.RELEASE</spring-cloud-config.version>
+    <spring-cloud-openfeign.version>2.2.3.RELEASE</spring-cloud-openfeign.version>
   </properties>
 
   <distributionManagement>
@@ -50,6 +54,47 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
+      <version>${spring-cloud-config.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+      <version>${spring-cloud-consul.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <version>${spring-cloud-openfeign.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
 
     <dependency>

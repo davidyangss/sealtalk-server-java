@@ -1,3 +1,25 @@
 spring:
   profiles:
-    active: dev,move      # dev 启用 application-dev.yml 环境，test 启用application-test.yml 环境
+    include: dev,move
+
+
+management:
+  metrics:
+    export:
+      prometheus:
+        descriptions: true
+        enabled: true
+  endpoint:
+    health.enabled: true
+    health.show-details: "ALWAYS"
+    env.enabled: true
+    prometheus.enabled: true
+    shutdown.enabled: true
+    loggers.enabled: true
+  health:
+    redis:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"

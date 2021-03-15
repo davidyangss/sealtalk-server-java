@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfileConfig {
 
-    @Value("${spring.profiles.active}")
+    @Value("${spring.profiles.include}")
     private String env;
 }

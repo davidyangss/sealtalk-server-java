@@ -1,0 +1,45 @@
+management:
+  metrics:
+    export:
+      prometheus:
+        descriptions: true
+        enabled: true
+  endpoint:
+    health.enabled: true
+    health.show-details: "ALWAYS"
+    env.enabled: true
+    consul.enabled: false
+    prometheus.enabled: true
+    shutdown.enabled: true
+    restart.enabled: true
+    pause.enabled: true
+    resume.enabled: true
+    loggers.enabled: true
+  health:
+    redis:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring.cloud:
+  loadbalancer.retry.enabled: false
+  config.enabled: false
+  consul:
+    enabled: false
+    host: localhost
+    port: 8500
+    discovery:
+      enabled: false
+      tags: ${spring.application.name}, ${env}
+      instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+      healthCheckPath: /actuator/health
+      healthCheckInterval: 3s
+      health-check-timeout: 60s
+      health-check-critical-timeout: 60s
+
+
+
+
+
