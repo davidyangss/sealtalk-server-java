@@ -12,14 +12,14 @@
 
 ### 激活配置文件
 
-请修改 [application.yml](../src/main/resources/application.yml) 文件中的配置激活相应环境的配置文件
+请修改 [application.yml](../src/main/resources/application-local.yml) 文件中的配置激活相应环境的配置文件
 ```yaml
 spring:
   profiles:
     active: dev      # 环境配置文件激活 ,根据配置的值激活对应的配置文件，如配置 dev 将使用application-dev.xml配置文件,测试、生产环境配置方法相同。
 ```
 
-### 配置文件说明，详细请参看 [application-dev.yml](../src/main/resources/application-dev.yml) 中的注释和示例
+### 配置文件说明，详细请参看 [application-dev.yml](../src/main/resources/application.yml) 中的注释和示例
 
 ```yaml
 sealtalk-config:
@@ -77,7 +77,7 @@ sealtalk-config:
 
 ### 数据库初始化
 
-数据库版本管理工具 使用了 [flyway](https://flywaydb.org/) 插件,相关配置在[application-dev.yml](../src/main/resources/application-dev.yml) 文件中：
+数据库版本管理工具 使用了 [flyway](https://flywaydb.org/) 插件,相关配置在[application-dev.yml](../src/main/resources/application.yml) 文件中：
 
 ```yaml
 spring:
